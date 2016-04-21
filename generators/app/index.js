@@ -1,7 +1,9 @@
-'use strict';
-var yeoman = require('yeoman-generator');
-var chalk = require('chalk');
-var yosay = require('yosay');
+/* globals which: false */
+
+import yeoman from 'yeoman-generator';
+import chalk from 'chalk';
+import yosay from 'yosay';
+import 'shelljs/global';
 
 class Generator extends yeoman.Base {
 
@@ -9,7 +11,7 @@ class Generator extends yeoman.Base {
     return {
       checkEnvironment() {
         if (!this._checkIfRNIsInstalled()) {
-          this.env.error("something bad is happened");
+          this.env.error('No React Native found: start by installing it https://facebook.github.io/react-native/docs/getting-started.html#quick-start');
         }
       }
     };
@@ -46,8 +48,7 @@ class Generator extends yeoman.Base {
   }
 
   _checkIfRNIsInstalled() {
-    console.error('checking if RN is installed');
-    return false;
+    return which('react-native');
   }
 
   // install: function () {

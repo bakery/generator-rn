@@ -35,8 +35,4 @@ describe('generator-rn:app', () => {
   it('checks if react-native is installed', () => {
     expect(_checkIfRNIsInstalledStub.calledOnce).to.be.ok;
   });
-
-  it('aborts setup if RN is not installed', () => {
-
-  });
 });
