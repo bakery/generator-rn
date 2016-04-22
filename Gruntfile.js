@@ -14,31 +14,31 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          src: ['generators/**/*.js'],
+          src: ['generators/*/*.js', 'generators/*.js'],
           dest: distDirectory
         }]
       }
     },
 
     eslint: {
-      target: ['generators/**/*.js', 'test/**/*.js']
+      target: ['generators/*/*.js', 'test/**/*.js']
     },
 
     mochaTest: {
       test: {
         options: {
           reporter: 'spec',
-          require: 'babel-core/register'
+          require: 'babel-core/register',
         },
         src: ['test/**/*.js']
       }
     },
 
     copy: {
-      'non-js': {
+      templates: {
         files: [{
           expand: true,
-          src: ['generators/**/*', '!generators/**/*.js'],
+          src: ['generators/**/templates/**'],
           dest: distDirectory
         }]
       }
@@ -48,5 +48,5 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('test', ['eslint', 'mochaTest']);
-  grunt.registerTask('pre-publish', ['clean', 'eslint', 'babel', 'copy:non-js']);
+  grunt.registerTask('pre-publish', ['clean', 'eslint', 'babel', 'copy:templates']);
 };
