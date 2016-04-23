@@ -20,20 +20,24 @@ describe('generator-rn:container', () => {
       helpers.run(path.join(__dirname, '../generators/container'))
         .withPrompts({
           containerName,
-          appDirectory
+          appDirectory,
+          addReducer: false
         }).on('ready', function (generator) {
         }).on('end', done);
     });
 
     it('sets up all container jazz', () => {
       assert.file([
+        'index.js',
+        'test.js'
+      ].map(f => `${appDirectory}/containers/${containerName}/${f}`));
+
+      assert.noFile([
         'actions.js',
         'actions.test.js',
         'constants.js',
-        'index.js',
         'reducer.js',
-        'reducer.test.js',
-        'test.js'
+        'reducer.test.js'
       ].map(f => `${appDirectory}/containers/${containerName}/${f}`));
     });
   });
@@ -54,6 +58,30 @@ describe('generator-rn:container', () => {
       assert.file([
         `${appDirectory}/selectors/${newSelectorName}.js`
       ]);
+    });
+  });
+
+  describe('container with reducer', () => {
+    before(done => {
+      helpers.run(path.join(__dirname, '../generators/container'))
+        .withPrompts({
+          containerName,
+          appDirectory,
+          addReducer: true
+        }).on('ready', function (generator) {
+        }).on('end', done);
+    });
+
+    it('creates standard container files + reducers, actions and constants', () => {
+      assert.file([
+        'index.js',
+        'test.js',
+        'actions.js',
+        'actions.test.js',
+        'constants.js',
+        'reducer.js',
+        'reducer.test.js'
+      ].map(f => `${appDirectory}/containers/${containerName}/${f}`));
     });
   });
 });

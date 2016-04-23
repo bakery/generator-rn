@@ -42,6 +42,13 @@ module.exports = BaseGenerator.extend({
     }
 
     prompts.push({
+      type: 'confirm',
+      name: 'addReducer',
+      message: 'Do you want a reducer + actions + constants generated?',
+      default: true
+    });
+
+    prompts.push({
       type: 'list',
       name: 'containerSelectorName',
       message: 'Which selector do you want to use?',
@@ -90,6 +97,8 @@ module.exports = BaseGenerator.extend({
         });
       }
 
+      this.addReducer = answers.addReducer;
+
       done();
     });
   },
@@ -97,14 +106,20 @@ module.exports = BaseGenerator.extend({
   configuring: {
     files() {
       this.files = [
-        'actions.js',
-        'actions.test.js',
-        'constants.js',
         'index.js',
-        'reducer.js',
-        'reducer.test.js',
         'test.js'
       ];
+
+      if (this.addReducer) {
+        this.files = [
+          ...this.files,
+          'actions.js',
+          'actions.test.js',
+          'constants.js',
+          'reducer.js',
+          'reducer.test.js'
+        ];
+      }
     }
   },
 
