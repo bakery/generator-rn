@@ -28,8 +28,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 <% if (selectorName) { %>
-export default connect(createSelector([<%= selectorName %>Selector],
-  (<%= selectorName %>) => ({ })
+
+export default connect(createSelector(
+  <%= selectorName %>Selector(),
+  (<%= selectorName %>) => ({ <%= selectorName %> })
 ), mapDispatchToProps)(<%= containerName %>);
 
 <% } else { %>
