@@ -12,26 +12,48 @@ const expect = chai.expect;
 describe('generator-rn:container', () => {
   const containerName = 'MyContainer';
   const appDirectory = 'app';
+  const containerSelectorName = 'New Selector';
+  const newSelectorName = 'new';
 
-  before(done => {
-    helpers.run(path.join(__dirname, '../generators/container'))
-      .withPrompts({
-        containerName,
-        appDirectory
-      }).on('ready', function (generator) {
-      }).on('end', done);
+  describe('simple container', () => {
+    before(done => {
+      helpers.run(path.join(__dirname, '../generators/container'))
+        .withPrompts({
+          containerName,
+          appDirectory
+        }).on('ready', function (generator) {
+        }).on('end', done);
+    });
+
+    it('sets up all container jazz', () => {
+      assert.file([
+        'actions.js',
+        'actions.test.js',
+        'constants.js',
+        'index.js',
+        'reducer.js',
+        'reducer.test.js',
+        'test.js'
+      ].map(f => `${appDirectory}/containers/${containerName}/${f}`));
+    });
   });
 
-  it('sets up all container jazz', () => {
-    assert.file([
-      'actions.js',
-      'actions.test.js',
-      'constants.js',
-      'index.js',
-      'reducer.js',
-      'reducer.test.js',
-      'selector.js',
-      'test.js'
-    ].map(f => `${appDirectory}/containers/${containerName}/${f}`));
+  describe('container with new selector', () => {
+    before(done => {
+      helpers.run(path.join(__dirname, '../generators/container'))
+        .withPrompts({
+          containerName,
+          appDirectory,
+          containerSelectorName,
+          selectorName: newSelectorName
+        }).on('ready', function (generator) {
+        }).on('end', done);
+    });
+
+    it('creates a new selector file', () => {
+      assert.file([
+        `${appDirectory}/selectors/${newSelectorName}.js`
+      ]);
+    });
   });
 });

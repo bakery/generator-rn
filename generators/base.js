@@ -23,5 +23,18 @@ module.exports = yeoman.Base.extend({
       constantCase: changeCase.constant,
       titleCase: changeCase.title
     };
+  },
+
+  getPromptsForAppDirectory() {
+    const needsAppDirectory = !this.appDirectory;
+    return needsAppDirectory ? [{
+      type: 'input',
+      name: 'appDirectory',
+      message: 'What is the name of your app directory?',
+      default: 'app',
+      validate: value => {
+        return (/^[$A-Z_][0-9A-Z_$]*$/i).test(value);
+      }
+    }] : [];
   }
 });

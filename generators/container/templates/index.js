@@ -1,12 +1,15 @@
 /*
  *
- * <%= helpers.properCase(containerName) %> 
+ * <%= helpers.properCase(containerName) %>
  *
  */
 
 import React, { Component, View, Text } from 'react-native';
 import { connect } from 'react-redux';
+<% if (selectorName) { %>
 import { createSelector } from 'reselect';
+import { <%= selectorName %>Selector } from '../selectors/<%= selectorName %>';
+<% } %>
 
 class <%= containerName %> extends Component {
   render() {
@@ -18,14 +21,21 @@ class <%= containerName %> extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {};
-}
-
 function mapDispatchToProps(dispatch) {
   return {
     dispatch,
   };
 }
 
+<% if (selectorName) { %>
+export default connect(createSelector([<%= selectorName %>Selector],
+  (<%= selectorName %>) => ({ })
+), mapDispatchToProps)(<%= containerName %>);
+
+<% } else { %>
+function mapStateToProps(state) {
+  return {}; 
+}
+
 export default connect(mapStateToProps, mapDispatchToProps)(<%= containerName %>);
+<% } %>

@@ -19,8 +19,11 @@
     "yeoman-generator"
   ],
   "dependencies": {
+    "ast-query": "^1.2.0",
     "chalk": "^1.0.0",
     "change-case": "^2.3.1",
+    "escodegen": "^1.8.0",
+    "esprima": "^2.7.2",
     "lodash": "^4.11.1",
     "shelljs": "^0.6.0",
     "underscore.string": "^3.3.4",

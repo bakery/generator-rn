@@ -1,4 +1,8 @@
 import BaseGenerator from '../base';
+import SelectorUtilities from '../selector/utils';
+
+const NEW_SELECTOR_PROMPT = 'New Selector';
+const NO_SELECTOR_PROMPT = 'No Selector';
 
 module.exports = BaseGenerator.extend({
   constructor(args, options) {
@@ -6,6 +10,7 @@ module.exports = BaseGenerator.extend({
 
     this.containerName = options.name;
     this.appDirectory = this.config.get('appDirectory');
+    this.selectorName = null;
   },
 
   prompting() {
@@ -36,6 +41,30 @@ module.exports = BaseGenerator.extend({
       });
     }
 
+    prompts.push({
+      type: 'list',
+      name: 'containerSelectorName',
+      message: 'Which selector do you want to use?',
+      choices: () => {
+        return [
+          ...SelectorUtilities.getExistingSelectors(this),
+          NEW_SELECTOR_PROMPT,
+          NO_SELECTOR_PROMPT
+        ];
+      }
+    });
+
+    prompts.push({
+      type: 'input',
+      name: 'selectorName',
+      message: 'What is the name for the new selector?',
+      default: 'data',
+      validate: value => {
+        return (/^[$A-Z_][0-9A-Z_$]*$/i).test(value);
+      },
+      when: answers => answers.containerSelectorName === 'New Selector'
+    });
+
     if (prompts.length === 0) {
       done();
       return;
@@ -49,6 +78,18 @@ module.exports = BaseGenerator.extend({
       if (answers.containerName) {
         this.containerName = answers.containerName;
       }
+
+      if (answers.containerSelectorName === NEW_SELECTOR_PROMPT) {
+        this.selectorName = answers.selectorName;
+        this.composeWith('selector', {
+          options: {
+            selectorName: answers.selectorName
+          }
+        }, {
+          local: require.resolve('../selector')
+        });
+      }
+
       done();
     });
   },
@@ -62,7 +103,6 @@ module.exports = BaseGenerator.extend({
         'index.js',
         'reducer.js',
         'reducer.test.js',
-        'selector.js',
         'test.js'
       ];
     }
