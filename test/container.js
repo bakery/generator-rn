@@ -6,6 +6,7 @@ import helpers from 'yeoman-test';
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+import yeoman from 'yeoman-generator';
 
 const expect = chai.expect;
 
@@ -58,30 +59,6 @@ describe('generator-rn:container', () => {
       assert.file([
         `${appDirectory}/selectors/${newSelectorName}.js`
       ]);
-    });
-  });
-
-  describe('container with reducer', () => {
-    before(done => {
-      helpers.run(path.join(__dirname, '../generators/container'))
-        .withPrompts({
-          containerName,
-          appDirectory,
-          addReducer: true
-        }).on('ready', function (generator) {
-        }).on('end', done);
-    });
-
-    it('creates standard container files + reducers, actions and constants', () => {
-      assert.file([
-        'index.js',
-        'test.js',
-        'actions.js',
-        'actions.test.js',
-        'constants.js',
-        'reducer.js',
-        'reducer.test.js'
-      ].map(f => `${appDirectory}/containers/${containerName}/${f}`));
     });
   });
 });

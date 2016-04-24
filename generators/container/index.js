@@ -109,17 +109,6 @@ module.exports = BaseGenerator.extend({
         'index.js',
         'test.js'
       ];
-
-      if (this.addReducer) {
-        this.files = [
-          ...this.files,
-          'actions.js',
-          'actions.test.js',
-          'constants.js',
-          'reducer.js',
-          'reducer.test.js'
-        ];
-      }
     }
   },
 
@@ -129,6 +118,16 @@ module.exports = BaseGenerator.extend({
         this.template(f,
           `${this.appDirectory}/containers/${this.containerName}/${f}`);
       });
+
+      if (this.addReducer) {
+        this.composeWith('rn:reducer', {
+          options: {
+            container: this.containerName
+          }
+        }, {
+          local: require.resolve('../reducer')
+        });
+      }
     }
   },
 

@@ -1,6 +1,6 @@
 /*
  *
- * {{ properCase name }} reducer
+ * <%= container %> reducer
  *
  */
 
@@ -11,7 +11,7 @@ import {
 
 const initialState = fromJS({});
 
-function <%= containerName %>Reducer(state = initialState, action) {
+function <%= container %>Reducer(state = initialState, action) {
   switch (action.type) {
     case DEFAULT_ACTION:
       return state;
@@ -20,4 +20,4 @@ function <%= containerName %>Reducer(state = initialState, action) {
   }
 }
 
-export default <%= containerName %>Reducer;
+export default <%= container %>Reducer;

@@ -1,6 +1,6 @@
 /*
  *
- * <%= containerName %>  actions
+ * <%= container %>  actions
  *
  */
 

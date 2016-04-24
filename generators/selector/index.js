@@ -1,6 +1,4 @@
 import BaseGenerator from '../base';
-// import esprima from 'esprima';
-// import escodegen from 'escodegen';
 import 'shelljs/global';
 
 module.exports = BaseGenerator.extend({
@@ -51,42 +49,10 @@ module.exports = BaseGenerator.extend({
 
   writing: {
     everything() {
-      // const escodegenOptions = {
-      //   format: {
-      //     indent: {
-      //       style: '  '
-      //     }
-      //   }
-      // };
       this.template(
         'selector.js',
         `${this.appDirectory}/${this.selectorsDirectory}/${this.selectorName}.js`
       );
-
-      //   const selectorsModule = esprima.parse('');
-      //   selectorsModule.body.push(
-      //     {
-      //       type: 'ExportDefaultDeclaration',
-      //       declaration: {
-      //         type: 'ArrayExpression',
-      //         elements: [
-      //           {
-      //             type: 'Identifier',
-      //             name: 'bodySelector'
-      //           },
-      //           {
-      //             type: 'Identifier',
-      //             name: 'anotherSelector'
-      //           }
-      //         ]
-      //       }
-      //     }
-      //   );
-
-      //   this.write(`${this.appDirectory}/${this.selectorsDirectory}/index.js`,
-      //     escodegen.generate(selectorsModule, escodegenOptions)
-      //   );
-      // }
     }
   },
 
