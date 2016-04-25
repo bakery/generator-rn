@@ -47,5 +47,8 @@ describe('generator-rn:reducer', () => {
     assert.fileContent(reducersModulePath,
       `import ${container}Reducer from './containers/${container}/reducer'`
     );
+    assert.fileContent(reducersModulePath,
+      `${container}: ${container}Reducer`
+    );
   });
 });
