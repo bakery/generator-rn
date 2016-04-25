@@ -45,7 +45,7 @@ module.exports = BaseGenerator.extend({
 
       try {
         fs.statSync(this.destinationPath(reducersModulePath));
-        reducersModuleContent = this.read(reducersModulePath);
+        reducersModuleContent = fs.readFileSync(reducersModulePath).toString();
       } catch (e) {
         reducersModuleContent = this.read(this.templatePath('reducers.js'));
       }
@@ -121,6 +121,7 @@ module.exports = BaseGenerator.extend({
           return str;
         });
 
+        this.conflicter.ignore = true;
         this.write(
           this.destinationPath(reducersModulePath),
           statements.join('\n')
