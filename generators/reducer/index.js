@@ -1,5 +1,4 @@
 import BaseGenerator from '../base';
-import fs from 'fs';
 import esprima from 'esprima';
 import escodegen from 'escodegen';
 import _ from 'lodash';
@@ -42,10 +41,9 @@ module.exports = BaseGenerator.extend({
       let reducersModuleContent;
       let reducersModule;
 
-      try {
-        fs.statSync(this.destinationPath(reducersModulePath));
-        reducersModuleContent = fs.readFileSync(reducersModulePath).toString();
-      } catch (e) {
+      if (this._fileExists(this.destinationPath(reducersModulePath))) {
+        reducersModuleContent = this._readFile(reducersModulePath);
+      } else {
         reducersModuleContent = this.read(this.templatePath('reducers.js'));
       }
 

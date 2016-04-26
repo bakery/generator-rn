@@ -2,6 +2,7 @@ import yeoman from 'yeoman-generator';
 import lodash from 'lodash';
 import s from 'underscore.string';
 import changeCase from 'change-case';
+import fs from 'fs';
 
 lodash.mixin(s.exports());
 
@@ -63,16 +64,20 @@ module.exports = yeoman.Base.extend({
     };
   },
 
-  getPromptsForAppDirectory() {
-    const needsAppDirectory = !this.appDirectory;
-    return needsAppDirectory ? [{
-      type: 'input',
-      name: 'appDirectory',
-      message: 'What is the name of your app directory?',
-      default: 'app',
-      validate: value => {
-        return (/^[$A-Z_][0-9A-Z_$]*$/i).test(value);
-      }
-    }] : [];
+  _fileExists(fullFilePath) {
+    try {
+      fs.statSync(fullFilePath);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  _readFile(fullFilePath) {
+    return fs.readFileSync(fullFilePath).toString();
+  },
+
+  dummyMethod() {
+    // XX: keep this here so tests can run against base generator
   }
 });

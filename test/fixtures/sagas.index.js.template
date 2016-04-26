@@ -1,0 +1,5 @@
+import anotherSaga from './anotherSaga';
+
+export default [
+  anotherSaga
+];
