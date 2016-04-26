@@ -39,13 +39,6 @@ module.exports = BaseGenerator.extend({
     });
   },
 
-  configuring: {
-    settings() {
-      this.config.set('appDirectory', 'app');
-      this.config.forceSave();
-    }
-  },
-
   writing: {
     packageJSON() {
       this.fs.writeJSON(
@@ -95,8 +88,6 @@ module.exports = BaseGenerator.extend({
   },
 
   end() {
-    const appDirectory = this.config.get('appDirectory');
-
     this.conflicter.force = true;
 
     ['ios', 'android'].forEach(platform => {
@@ -105,12 +96,12 @@ module.exports = BaseGenerator.extend({
         this.destinationPath(`index.${platform}.js`),
         {
           applicationName: this.applicationName,
-          appDirectory
+          appDirectory: this.appDirectory
         }
       );
     });
 
-    this.bulkDirectory('app', appDirectory);
+    this.bulkDirectory('app', this.appDirectory);
 
     this.composeWith('container', {
       options: {

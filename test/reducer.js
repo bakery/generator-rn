@@ -18,12 +18,7 @@ describe('generator-rn:reducer', () => {
   describe('without existing reducers module', () => {
     before(done => {
       helpers.run(path.join(__dirname, '../generators/reducer'))
-      // .inTmpDir(function (dir) {
-      //   var done = this.async();
-      //   mkdirp(path.resolve(dir, `${appDirectory}/containers/${container}`), done);
-      // })
       .withOptions({
-        appDirectory,
         container
       }).withPrompts({
         appDirectory,

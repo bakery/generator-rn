@@ -15,7 +15,6 @@ describe('generator-rn:app', () => {
 
   before(done => {
     helpers.run(path.join(__dirname, '../generators/app'))
-      .withPrompts({someAnswer: true})
       .on('ready', function (generator) {
         _checkIfRNIsInstalledStub =
           sinon.stub(generator, '_checkIfRNIsInstalled').returns(true);

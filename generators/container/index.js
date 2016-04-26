@@ -9,25 +9,12 @@ module.exports = BaseGenerator.extend({
     BaseGenerator.apply(this, arguments);
 
     this.containerName = options.name;
-    this.appDirectory = this.config.get('appDirectory');
     this.selectorName = null;
   },
 
   prompting() {
     const done = this.async();
     const prompts = [];
-
-    if (!this.appDirectory) {
-      prompts.push({
-        type: 'input',
-        name: 'appDirectory',
-        message: 'What is the name of your app directory?',
-        default: 'app',
-        validate: value => {
-          return (/^[$A-Z_][0-9A-Z_$]*$/i).test(value);
-        }
-      });
-    }
 
     if (!this.containerName) {
       prompts.push({
@@ -78,10 +65,6 @@ module.exports = BaseGenerator.extend({
     }
 
     this.prompt(prompts, answers => {
-      if (answers.appDirectory) {
-        this.appDirectory = answers.appDirectory;
-      }
-
       if (answers.containerName) {
         this.containerName = answers.containerName;
       }

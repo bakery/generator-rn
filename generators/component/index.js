@@ -1,11 +1,8 @@
 import BaseGenerator from '../base';
-// import fs from 'fs';
-// import _ from 'lodash';
 
 module.exports = BaseGenerator.extend({
   constructor(args, options) {
     BaseGenerator.apply(this, arguments);
-    this.appDirectory = this.config.get('appDirectory') || options.appDirectory;
     this.componentName = options.componentName;
     this.isContainer = false;
     this.selectorName = null;
@@ -14,18 +11,6 @@ module.exports = BaseGenerator.extend({
   prompting() {
     const done = this.async();
     const prompts = [];
-
-    if (!this.appDirectory) {
-      prompts.push({
-        type: 'input',
-        name: 'appDirectory',
-        message: 'What is the name of your app directory?',
-        default: 'app',
-        validate: value => {
-          return (/^[$A-Z_][0-9A-Z_$]*$/i).test(value);
-        }
-      });
-    }
 
     if (!this.componentName) {
       prompts.push({
@@ -45,10 +30,6 @@ module.exports = BaseGenerator.extend({
     }
 
     this.prompt(prompts, answers => {
-      if (answers.appDirectory) {
-        this.appDirectory = answers.appDirectory;
-      }
-
       if (answers.componentName) {
         this.componentName = answers.componentName;
       }

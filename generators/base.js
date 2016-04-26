@@ -8,6 +8,9 @@ lodash.mixin(s.exports());
 module.exports = yeoman.Base.extend({
   constructor() {
     yeoman.Base.apply(this, arguments);
+
+    this.appDirectory = 'app';
+
     this.helpers = {
       lodash,
       camelCase: changeCase.camel,

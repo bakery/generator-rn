@@ -19,12 +19,16 @@ describe('base generator', () => {
       }).on('end', done);
   });
 
-  it('base generator is defined', () => {
+  it('is defined', () => {
     expect(_generator).to.be.ok;
   });
 
-  it('base generator exposes templateHelpers', () => {
+  it('exposes template helpers', () => {
     expect(_generator.helpers).to.be.ok;
     expect(_generator.helpers.lodash).to.be.ok;
+  });
+
+  it('has appDirectory attribute', () => {
+    expect(_generator.appDirectory).to.be.ok;
   });
 });

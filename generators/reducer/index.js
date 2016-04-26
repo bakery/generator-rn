@@ -15,7 +15,6 @@ module.exports = BaseGenerator.extend({
       return;
     }
 
-    this.appDirectory = this.config.get('appDirectory') || options.appDirectory;
     this.container = options.container;
   },
 

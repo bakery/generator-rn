@@ -17,8 +17,7 @@ describe('generator-rn:component', () => {
   before(done => {
     helpers.run(path.join(__dirname, '../generators/component'))
       .withPrompts({
-        componentName,
-        appDirectory
+        componentName
       }).on('ready', function (generator) {
       }).on('end', done);
   });

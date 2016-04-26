@@ -6,14 +6,12 @@ module.exports = BaseGenerator.extend({
     BaseGenerator.apply(this, arguments);
 
     this.selectorName = options.selectorName;
-    this.appDirectory = this.config.get('appDirectory');
     this.selectorsDirectory = 'selectors';
   },
 
   prompting() {
     const done = this.async();
-    const appDirectoryPrompts = this.getPromptsForAppDirectory();
-    const prompts = [...appDirectoryPrompts];
+    const prompts = [];
 
     if (!this.selectorName) {
       prompts.push({
@@ -33,10 +31,6 @@ module.exports = BaseGenerator.extend({
     }
 
     this.prompt(prompts, answers => {
-      if (answers.appDirectory) {
-        this.appDirectory = answers.appDirectory;
-      }
-
       if (answers.selectorName) {
         this.selectorName = answers.selectorName;
       }

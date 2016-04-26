@@ -21,7 +21,6 @@ describe('generator-rn:container', () => {
       helpers.run(path.join(__dirname, '../generators/container'))
         .withPrompts({
           containerName,
-          appDirectory,
           addReducer: false
         }).on('ready', function (generator) {
         }).on('end', done);
@@ -48,7 +47,6 @@ describe('generator-rn:container', () => {
       helpers.run(path.join(__dirname, '../generators/container'))
         .withPrompts({
           containerName,
-          appDirectory,
           containerSelectorName,
           selectorName: newSelectorName
         }).on('ready', function (generator) {
