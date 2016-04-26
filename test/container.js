@@ -14,6 +14,8 @@ describe('generator-rn:container', () => {
   const containerName = 'MyContainer';
   const appDirectory = 'app';
   const newSelectorName = 'new';
+  const containerModule = `${appDirectory}/containers/${containerName}/index.js`;
+  const stylesheetModule = `${appDirectory}/containers/${containerName}/styles.js`;
 
   describe('simple container', () => {
     before(done => {
@@ -41,8 +43,16 @@ describe('generator-rn:container', () => {
     });
 
     it('exposes component wrapped into connect', () => {
-      assert.fileContent(`${appDirectory}/containers/${containerName}/index.js`,
+      assert.fileContent(containerModule,
         `export default connect(mapStateToProps, mapDispatchToProps)(${containerName});`);
+    });
+
+    it('generates a stylesheet', () => {
+      assert.file(stylesheetModule);
+    });
+
+    it('includes reference to the stylesheet', () => {
+      assert.fileContent(containerModule, `import styles from './styles';`);
     });
   });
 

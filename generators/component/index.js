@@ -42,7 +42,8 @@ module.exports = BaseGenerator.extend({
     files() {
       this.files = [
         'index.js',
-        'test.js'
+        'test.js',
+        'styles.js'
       ];
     }
   },

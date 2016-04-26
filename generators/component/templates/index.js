@@ -5,6 +5,7 @@
  */
 
 import React, { Component, View, Text } from 'react-native';
+import styles from './styles';
 <% if (isContainer) { %>
 import { connect } from 'react-redux';
   <% if (selectorName) { %>
