@@ -78,6 +78,8 @@ module.exports = BaseGenerator.extend({
         }, {
           local: require.resolve('../selector')
         });
+      } else if (answers.containerSelectorName !== NO_SELECTOR_PROMPT) {
+        this.selectorName = answers.containerSelectorName;
       }
 
       this.addReducer = answers.addReducer;
@@ -96,12 +98,22 @@ module.exports = BaseGenerator.extend({
   },
 
   writing: {
-    everything() {
-      this.files.forEach(f => {
-        this.template(f,
-          `${this.appDirectory}/containers/${this.containerName}/${f}`);
-      });
+    component() {
+      let options = {
+        componentName: this.containerName,
+        isContainer: true
+      };
 
+      if (this.selectorName !== NO_SELECTOR_PROMPT) {
+        options.selectorName = this.selectorName;
+      }
+
+      this.composeWith('rn:component', {options}, {
+        local: require.resolve('../component')
+      });
+    },
+
+    reducer() {
       if (this.addReducer) {
         this.composeWith('rn:reducer', {
           options: {
@@ -112,9 +124,5 @@ module.exports = BaseGenerator.extend({
         });
       }
     }
-  },
-
-  install: {
-
   }
 });

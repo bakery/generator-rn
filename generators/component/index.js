@@ -4,8 +4,8 @@ module.exports = BaseGenerator.extend({
   constructor(args, options) {
     BaseGenerator.apply(this, arguments);
     this.componentName = options.componentName;
-    this.isContainer = false;
-    this.selectorName = null;
+    this.isContainer = options.isContainer;
+    this.selectorName = options.selectorName;
   },
 
   prompting() {
@@ -49,9 +49,10 @@ module.exports = BaseGenerator.extend({
 
   writing: {
     everything() {
+      const componentOrContainer = this.isContainer ? 'containers' : 'components';
       this.files.forEach(f => {
         this.template(f,
-          `${this.appDirectory}/components/${this.componentName}/${f}`);
+          `${this.appDirectory}/${componentOrContainer}/${this.componentName}/${f}`);
       });
     }
   }

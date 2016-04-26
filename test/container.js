@@ -13,7 +13,6 @@ const expect = chai.expect;
 describe('generator-rn:container', () => {
   const containerName = 'MyContainer';
   const appDirectory = 'app';
-  const containerSelectorName = 'New Selector';
   const newSelectorName = 'new';
 
   describe('simple container', () => {
@@ -40,6 +39,11 @@ describe('generator-rn:container', () => {
         'reducer.test.js'
       ].map(f => `${appDirectory}/containers/${containerName}/${f}`));
     });
+
+    it('exposes component wrapped into connect', () => {
+      assert.fileContent(`${appDirectory}/containers/${containerName}/index.js`,
+        `export default connect(mapStateToProps, mapDispatchToProps)(${containerName});`);
+    });
   });
 
   describe('container with new selector', () => {
@@ -47,7 +51,7 @@ describe('generator-rn:container', () => {
       helpers.run(path.join(__dirname, '../generators/container'))
         .withPrompts({
           containerName,
-          containerSelectorName,
+          containerSelectorName: 'New Selector',
           selectorName: newSelectorName
         }).on('ready', function (generator) {
         }).on('end', done);
@@ -57,6 +61,40 @@ describe('generator-rn:container', () => {
       assert.file([
         `${appDirectory}/selectors/${newSelectorName}.js`
       ]);
+    });
+
+    it('references selector in the container file', () => {
+      const containerFile = `${appDirectory}/containers/${containerName}/index.js`;
+      assert.fileContent(containerFile,
+        `import { ${newSelectorName}Selector } from '../selectors/${newSelectorName}';`
+      );
+      assert.fileContent(containerFile,
+        `export default connect(createSelector(\n  ${newSelectorName}Selector(),`
+      );
+    });
+  });
+
+  describe('container with existing selector', () => {
+    const selectorName = 'existingSelector';
+
+    before(done => {
+      helpers.run(path.join(__dirname, '../generators/container'))
+        .withPrompts({
+          containerName,
+          containerSelectorName: selectorName,
+          selectorName
+        }).on('ready', function (generator) {
+        }).on('end', done);
+    });
+
+    it('references selector in the container file', () => {
+      const containerFile = `${appDirectory}/containers/${containerName}/index.js`;
+      assert.fileContent(containerFile,
+        `import { ${selectorName}Selector } from '../selectors/${selectorName}';`
+      );
+      assert.fileContent(containerFile,
+        `export default connect(createSelector(\n  ${selectorName}Selector(),`
+      );
     });
   });
 });
