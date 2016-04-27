@@ -5,6 +5,7 @@ import BaseGenerator from '../base';
 import chalk from 'chalk';
 import yosay from 'yosay';
 import 'shelljs/global';
+import fs from 'fs';
 
 module.exports = BaseGenerator.extend({
 
@@ -37,6 +38,18 @@ module.exports = BaseGenerator.extend({
       this.applicationName = answers.name;
       done();
     });
+  },
+
+  makeSureDestinationDirectoryIsNotOccupiedAlready() {
+    // check to see if destination directory is empty or not
+    // if it's empty -> go ahead and do the thing
+    // if not empty -> create a folder and use it as cwd
+
+    const filesInDestinationDirectory = fs.readdirSync(this.destinationPath('.'));
+    if (filesInDestinationDirectory.length !== 0) {
+      fs.mkdirSync(this.destinationPath(this.applicationName));
+      this.destinationRoot(this.destinationPath(this.applicationName));
+    }
   },
 
   writing: {
