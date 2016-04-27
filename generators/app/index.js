@@ -116,12 +116,13 @@ module.exports = BaseGenerator.extend({
 
     this.bulkDirectory('app', this.appDirectory);
 
-    this.composeWith('container', {
+    this.composeWith('component', {
       options: {
-        name: 'App'
+        componentName: 'App',
+        destinationRoot: this.destinationPath('.')
       }
     }, {
-      local: require.resolve('../container')
+      local: require.resolve('../component')
     });
   },
 

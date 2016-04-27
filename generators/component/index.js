@@ -6,6 +6,9 @@ module.exports = BaseGenerator.extend({
     this.componentName = options.componentName;
     this.isContainer = options.isContainer;
     this.selectorName = options.selectorName;
+    if (options.destinationRoot) {
+      this.destinationRoot(options.destinationRoot);
+    }
   },
 
   prompting() {

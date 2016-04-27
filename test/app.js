@@ -20,6 +20,8 @@ describe('generator-rn:app', () => {
     'app/reducers.js',
     'app/setup.js',
     'app/store.js',
+    'app/components/App/index.js',
+    'app/components/App/styles.js',
     '.eslintrc',
     'index.ios.js',
     'index.android.js',
