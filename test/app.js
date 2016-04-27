@@ -6,13 +6,16 @@ import helpers from 'yeoman-test';
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import fs from 'fs-extra';
+import fsExtra from 'fs-extra';
+import fs from 'fs';
 
 const expect = chai.expect;
 
 describe('generator-rn:app', () => {
+  let _generator;
   let _checkIfRNIsInstalledStub = null;
   let _initRNSpy = null;
+  let _abortSetupStub = null;
   const applicationName = 'MyReactApp';
   const applicationFiles = [
     'app/sagas/index.js',
@@ -28,22 +31,27 @@ describe('generator-rn:app', () => {
     'package.json'
   ];
 
+  const _stubThings = generator => {
+    _generator = generator;
+    _checkIfRNIsInstalledStub = sinon.stub(generator, '_checkIfRNIsInstalled').returns(true);
+    _initRNSpy = sinon.stub(generator, '_initRN').returns(true);
+    _abortSetupStub = sinon.stub(generator, '_abortSetup').returns(true);
+  };
+
+  const _unstubThings = () => {
+    _checkIfRNIsInstalledStub && _checkIfRNIsInstalledStub.restore();
+    _initRNSpy && _initRNSpy.restore();
+    _abortSetupStub && _abortSetupStub.restore();
+  };
+
   describe('simple generator', () => {
     before(done => {
       helpers.run(path.join(__dirname, '../generators/app'))
-        .on('ready', function (generator) {
-          _checkIfRNIsInstalledStub =
-            sinon.stub(generator, '_checkIfRNIsInstalled').returns(true);
-          _initRNSpy =
-            sinon.stub(generator, '_initRN').returns(true);
-        })
+        .on('ready', _stubThings)
         .on('end', done);
     });
 
-    after(() => {
-      _checkIfRNIsInstalledStub && _checkIfRNIsInstalledStub.restore();
-      _initRNSpy && _initRNSpy.restore();
-    });
+    after(_unstubThings);
 
     it('checks if react-native is installed', () => {
       expect(_checkIfRNIsInstalledStub.calledOnce).to.be.ok;
@@ -59,12 +67,10 @@ describe('generator-rn:app', () => {
   });
 
   describe('running generator in a non-empty directory', () => {
-    let _generator;
-
     before(done => {
       helpers.run(path.join(__dirname, '../generators/app'))
         .inTmpDir(function (dir) {
-          fs.copySync(
+          fsExtra.copySync(
             path.join(__dirname, './fixtures/random-file.txt'),
             path.join(dir, 'random-file.txt')
           );
@@ -72,24 +78,39 @@ describe('generator-rn:app', () => {
         .withPrompts({
           name: applicationName
         })
-        .on('ready', function (generator) {
-          _generator = generator;
-          _checkIfRNIsInstalledStub =
-            sinon.stub(generator, '_checkIfRNIsInstalled').returns(true);
-          _initRNSpy =
-            sinon.stub(generator, '_initRN').returns(true);
-        })
+        .on('ready', _stubThings)
         .on('end', done);
     });
 
-    after(() => {
-      _checkIfRNIsInstalledStub && _checkIfRNIsInstalledStub.restore();
-      _initRNSpy && _initRNSpy.restore();
-    });
+    after(_unstubThings);
 
     it('sets things up in a newly created directory', () => {
       expect(_generator.destinationPath('.').indexOf(applicationName)).to.be.ok;
       assert.file(applicationFiles);
+    });
+  });
+
+  describe('running generator in a non-empty directory with something that looks like a RN app', () => {
+    before(done => {
+      helpers.run(path.join(__dirname, '../generators/app'))
+        .inTmpDir(function (dir) {
+          // XX: make it look like a directory with some RN artifacts
+          fs.mkdirSync(path.join(dir, 'android'));
+          fs.mkdirSync(path.join(dir, 'ios'));
+          fs.writeFileSync(path.join(dir, 'index.ios.js'), '00000000');
+          fs.writeFileSync(path.join(dir, 'index.android.js'), '00000000');
+        })
+        .withPrompts({
+          name: applicationName
+        })
+        .on('ready', _stubThings)
+        .on('end', done);
+    });
+
+    after(_unstubThings);
+
+    it('bails on app generation', () => {
+      expect(_abortSetupStub.calledOnce).to.be.ok;
     });
   });
 });

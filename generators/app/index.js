@@ -10,6 +10,11 @@ import fs from 'fs';
 module.exports = BaseGenerator.extend({
 
   initializing() {
+    // XX: check if current directory has smth resembling a bootstrapped RN application
+    if (this._currentDirectoryHasRNApp()) {
+      this._abortSetup();
+    }
+
     if (!this._checkIfRNIsInstalled()) {
       this.env.error('No React Native found: start by installing it https://facebook.github.io/react-native/docs/getting-started.html#quick-start');
     }
@@ -136,5 +141,18 @@ module.exports = BaseGenerator.extend({
       this.destinationRoot(),
       this.applicationName
     ]);
+  },
+
+  _currentDirectoryHasRNApp() {
+    try {
+      ['android', 'ios', 'index.ios.js', 'index.android.js'].forEach(f => fs.statSync(this.destinationPath(f)));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  _abortSetup() {
+    this.env.error('Yo! Looks like you are trying to run the app generator in a directory that already has a RN app.');
   }
 });
