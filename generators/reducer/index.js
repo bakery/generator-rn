@@ -20,11 +20,11 @@ module.exports = BaseGenerator.extend({
   configuring: {
     files() {
       this.files = [
-        'actions.js',
-        'actions.test.js',
-        'constants.js',
-        'reducer.js',
-        'reducer.test.js'
+        'actions.js.hbs',
+        'actions.test.js.hbs',
+        'constants.js.hbs',
+        'reducer.js.hbs',
+        'reducer.test.js.hbs'
       ];
     }
   },
@@ -32,7 +32,7 @@ module.exports = BaseGenerator.extend({
   writing: {
     everything() {
       this.files.forEach(f => {
-        this.template(f, `${this.appDirectory}/containers/${this.container}/${f}`);
+        this.template(f, `${this.appDirectory}/containers/${this.container}/${this._dropHBSExtension(f)}`);
       });
     },
 
@@ -44,7 +44,7 @@ module.exports = BaseGenerator.extend({
       if (this._fileExists(this.destinationPath(reducersModulePath))) {
         reducersModuleContent = this._readFile(reducersModulePath);
       } else {
-        reducersModuleContent = this.read(this.templatePath('reducers.js'));
+        reducersModuleContent = this.read(this.templatePath('reducers.js.hbs'));
       }
 
       try {

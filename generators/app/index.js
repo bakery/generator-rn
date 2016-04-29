@@ -109,12 +109,9 @@ module.exports = BaseGenerator.extend({
     this.conflicter.force = true;
 
     ['ios', 'android'].forEach(platform => {
-      this.template(
-        this.templatePath('index.ejs'),
-        this.destinationPath(`index.${platform}.js`),
+      this.template('index.js.hbs', `index.${platform}.js`,
         {
-          applicationName: this.applicationName,
-          appDirectory: this.appDirectory
+          applicationName: this.applicationName
         }
       );
     });

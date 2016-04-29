@@ -1,10 +1,11 @@
 import yeoman from 'yeoman-generator';
-import lodash from 'lodash';
+import _ from 'lodash';
 import s from 'underscore.string';
 import changeCase from 'change-case';
 import fs from 'fs';
+import Handlebars from 'handlebars';
 
-lodash.mixin(s.exports());
+_.mixin(s.exports());
 
 module.exports = yeoman.Base.extend({
   constructor() {
@@ -13,7 +14,7 @@ module.exports = yeoman.Base.extend({
     this.appDirectory = 'app';
 
     this.helpers = {
-      lodash,
+      _,
       camelCase: changeCase.camel,
       snakeCase: changeCase.snake,
       dashCase: changeCase.param,
@@ -62,6 +63,13 @@ module.exports = yeoman.Base.extend({
       directive: false,
       verbatim: undefined
     };
+
+    this.template = (source, destination, data) => {
+      // XX: override Yo's standard template method to use Handlebars templates
+      const template = Handlebars.compile(this.read(source));
+      const content = template(_.extend({}, this, data || {}));
+      this.write(destination, content);
+    };
   },
 
   _fileExists(fullFilePath) {
@@ -75,6 +83,11 @@ module.exports = yeoman.Base.extend({
 
   _readFile(fullFilePath) {
     return fs.readFileSync(fullFilePath).toString();
+  },
+
+  _dropHBSExtension(fileName) {
+    const parts = fileName.split('.hbs');
+    return parts.length === 2 ? parts[0] : fileName;
   },
 
   dummyMethod() {

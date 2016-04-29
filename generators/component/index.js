@@ -44,9 +44,9 @@ module.exports = BaseGenerator.extend({
   configuring: {
     files() {
       this.files = [
-        'index.js',
-        'test.js',
-        'styles.js'
+        'index.js.hbs',
+        'test.js.hbs',
+        'styles.js.hbs'
       ];
     }
   },
@@ -56,7 +56,7 @@ module.exports = BaseGenerator.extend({
       const componentOrContainer = this.isContainer ? 'containers' : 'components';
       this.files.forEach(f => {
         this.template(f,
-          `${this.appDirectory}/${componentOrContainer}/${this.componentName}/${f}`);
+          `${this.appDirectory}/${componentOrContainer}/${this.componentName}/${this._dropHBSExtension(f)}`);
       });
     }
   }

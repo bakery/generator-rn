@@ -38,19 +38,12 @@ module.exports = BaseGenerator.extend({
     });
   },
 
-  configuring: {
-  },
-
   writing: {
     everything() {
       this.template(
-        'selector.js',
+        'selector.js.hbs',
         `${this.appDirectory}/${this.selectorsDirectory}/${this.selectorName}.js`
       );
     }
-  },
-
-  install: {
-
   }
 });

@@ -24,7 +24,7 @@ module.exports = BaseGenerator.extend({
 
   writing: {
     sagaFile() {
-      this.template('saga.js', `${this.appDirectory}/sagas/${this.sagaName}.js`);
+      this.template('saga.js.hbs', `${this.appDirectory}/sagas/${this.sagaName}.js`);
     },
 
     updateSagasIndex() {
