@@ -1,5 +1,4 @@
 import BaseGenerator from '../base';
-import esprima from 'esprima';
 import escodegen from 'escodegen';
 import _ from 'lodash';
 
@@ -39,8 +38,9 @@ module.exports = BaseGenerator.extend({
       }
 
       try {
-        sagasModule = esprima.parse(sagasIndexContent, {sourceType: 'module'});
+        sagasModule = this.parseJSSource(sagasIndexContent);
       } catch (e) {
+        console.error('error is', e);
         this.env.error(`There seems to be an issue with your sagas module (${sagasIndex})`, e);
         return;
       }
@@ -69,19 +69,23 @@ module.exports = BaseGenerator.extend({
         }
       }, ...sagasModule.body];
 
-      const exportDeclaration = _.find(sagasModule.body, d => {
-        return d.type === 'ExportDefaultDeclaration' &&
-          d.declaration && d.declaration.type === 'ArrayExpression';
+      const sagasList = _.find(sagasModule.body, d => {
+        // XX: find const sagas = [SAGAS HERE];
+        return d.type === 'VariableDeclaration' &&
+          d.declarations[0].id.name === 'sagas';
+
+        // return d.type === 'ExportDefaultDeclaration' &&
+        //   d.declaration && d.declaration.type === 'ArrayExpression';
       });
 
-      if (!exportDeclaration) {
+      if (!sagasList) {
         this.env.error(
-          `There seems to be an issue with your sagas module (${sagasIndex}) - invalid export declaration`
+          `There seems to be an issue with your sagas module (${sagasIndex}) - cannot find list of sagas`
         );
         return;
       }
 
-      exportDeclaration.declaration.elements.push({
+      sagasList.declarations[0].init.elements.push({
         type: 'Identifier',
         name: this.sagaName
       });

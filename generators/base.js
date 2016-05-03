@@ -4,6 +4,8 @@ import s from 'underscore.string';
 import changeCase from 'change-case';
 import fs from 'fs';
 import Handlebars from 'handlebars';
+import esprima from 'esprima';
+import escodegen from 'escodegen';
 
 _.mixin(s.exports());
 
@@ -34,7 +36,8 @@ module.exports = yeoman.Base.extend({
         indent: {
           style: '  ',
           base: 0,
-          adjustMultilineComment: false
+          adjustMultilineComment: false,
+          preserveBlankLines: true
         },
         newline: '\n',
         space: ' ',
@@ -53,8 +56,8 @@ module.exports = yeoman.Base.extend({
         parenthesizedComprehensionBlock: false,
         comprehensionExpressionStartsWithAssignment: false
       },
-      parse: null,
-      comment: false,
+      parse: esprima.parse,
+      comment: true,
       sourceMap: undefined,
       sourceMapRoot: null,
       sourceMapWithCode: false,
@@ -64,11 +67,26 @@ module.exports = yeoman.Base.extend({
       verbatim: undefined
     };
 
+    this.esprimaOptions = {
+      sourceType: 'module',
+      comment: true,
+      range: true,
+      loc: true,
+      tokens: true,
+      raw: false
+    };
+
     this.template = (source, destination, data) => {
       // XX: override Yo's standard template method to use Handlebars templates
       const template = Handlebars.compile(this.read(source));
       const content = template(_.extend({}, this, data || {}));
       this.write(destination, content);
+    };
+
+    this.parseJSSource = content => {
+      let tree = esprima.parse(content, this.esprimaOptions);
+      tree = escodegen.attachComments(tree, tree.comments, tree.tokens);
+      return tree;
     };
   },
 

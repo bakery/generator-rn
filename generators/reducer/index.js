@@ -1,5 +1,4 @@
 import BaseGenerator from '../base';
-import esprima from 'esprima';
 import escodegen from 'escodegen';
 import _ from 'lodash';
 
@@ -48,7 +47,8 @@ module.exports = BaseGenerator.extend({
       }
 
       try {
-        reducersModule = esprima.parse(reducersModuleContent, {sourceType: 'module'});
+        // reducersModule = esprima.parse(reducersModuleContent, this.esprimaOptions);
+        reducersModule = this.parseJSSource(reducersModuleContent);
       } catch (e) {
         this.env.error(`There seems to be an issue with your reducers module (${this.destinationPath(reducersModulePath)})`, e);
         return;
@@ -111,17 +111,11 @@ module.exports = BaseGenerator.extend({
       }
 
       try {
-        // XX: for some odd reason passing a 'normal' AST
-        // produced by esprima causes escodegen to throw
-        const statements = reducersModule.body.map(s => {
-          const str = escodegen.generate(s, this.escodegenOptions);
-          return str;
-        });
-
+        const statements = escodegen.generate(reducersModule, this.escodegenOptions);
         this.conflicter.ignore = true;
         this.write(
           this.destinationPath(reducersModulePath),
-          statements.join('\n')
+          statements
         );
       } catch (e) {
         console.error('error generating reducers.js', e);

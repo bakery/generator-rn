@@ -47,7 +47,10 @@ describe('generator-rn:saga', () => {
 
     it('exports new saga in sagas/index.js', () => {
       assert.fileContent(`${appDirectory}/sagas/index.js`,
-        `export default [${sagaName}]`
+        `const sagas = [${sagaName}];`
+      );
+      assert.fileContent(`${appDirectory}/sagas/index.js`,
+        `module.exports = sagas;`
       );
     });
   });
