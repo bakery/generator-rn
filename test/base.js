@@ -25,7 +25,6 @@ describe('base generator', () => {
 
   it('exposes template helpers', () => {
     expect(_generator.helpers).to.be.ok;
-    expect(_generator.helpers._).to.be.ok;
   });
 
   it('has appDirectory attribute', () => {

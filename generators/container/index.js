@@ -23,7 +23,7 @@ module.exports = BaseGenerator.extend({
         message: 'What should your container be called?',
         default: 'MyNewContainer',
         validate: value => {
-          return (/^[$A-Z_][0-9A-Z_$]*$/i).test(value);
+          return this.namingConventions.componentName.regEx.test(value);
         }
       });
     }
@@ -90,6 +90,8 @@ module.exports = BaseGenerator.extend({
 
   configuring: {
     files() {
+      this.containerName = this.namingConventions.componentName.clean(this.containerName);
+
       this.files = [
         'index.js',
         'test.js'

@@ -15,21 +15,7 @@ module.exports = yeoman.Base.extend({
 
     this.appDirectory = 'app';
 
-    this.helpers = {
-      _,
-      camelCase: changeCase.camel,
-      snakeCase: changeCase.snake,
-      dashCase: changeCase.param,
-      kabobCase: changeCase.param,
-      dotCase: changeCase.dot,
-      pathCase: changeCase.path,
-      properCase: changeCase.pascal,
-      pascalCase: changeCase.pascal,
-      lowerCase: changeCase.lower,
-      sentenceCase: changeCase.sentence,
-      constantCase: changeCase.constant,
-      titleCase: changeCase.title
-    };
+    this.helpers = _.extend({}, changeCase);
 
     this.escodegenOptions = {
       format: {
@@ -74,6 +60,16 @@ module.exports = yeoman.Base.extend({
       loc: true,
       tokens: true,
       raw: false
+    };
+
+    this.namingConventions = {
+      // used for UI components and containers
+      componentName: {
+        regEx: /^[A-Z][0-9A-Z]*$/i,
+        clean: name => {
+          return this.helpers.pascal(name);
+        }
+      }
     };
 
     this.template = (source, destination, data) => {
