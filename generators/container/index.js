@@ -73,7 +73,8 @@ module.exports = BaseGenerator.extend({
         this.selectorName = answers.selectorName;
         this.composeWith('selector', {
           options: {
-            selectorName: answers.selectorName
+            selectorName: answers.selectorName,
+            reducer: this.namingConventions.reducerName.clean(this.containerName)
           }
         }, {
           local: require.resolve('../selector')

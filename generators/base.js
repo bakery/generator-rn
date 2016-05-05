@@ -63,7 +63,6 @@ module.exports = yeoman.Base.extend({
     };
 
     this.namingConventions = {
-      // used for UI components and containers
       componentName: {
         regEx: /^[A-Z][0-9A-Z]*$/i,
         clean: name => {
@@ -75,8 +74,17 @@ module.exports = yeoman.Base.extend({
         clean: name => {
           return this.helpers.camelCase(name);
         }
+      },
+
+      selectorName: {
+        regEx: /^[A-Z][0-9A-Z]*$/i,
+        clean: name => {
+          return this.helpers.camelCase(name);
+        }
       }
     };
+
+    Handlebars.registerHelper('uppercaseFirst', text => changeCase.upperCaseFirst(text));
 
     this.template = (source, destination, data) => {
       // XX: override Yo's standard template method to use Handlebars templates

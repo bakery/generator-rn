@@ -11,7 +11,7 @@ import styles from './styles';
 import { connect } from 'react-redux';
   {{#if selectorName}}
 import { createSelector } from 'reselect';
-import { {{selectorName}}Selector } from '../selectors/{{selectorName}}';
+import { select{{uppercaseFirst selectorName}} } from '../../selectors/{{selectorName}}';
   {{/if}}
 {{/if}}
 
@@ -35,7 +35,7 @@ function mapDispatchToProps(dispatch) {
 
 {{#if selectorName}}
 export default connect(createSelector(
-  {{selectorName}}Selector(),
+  select{{uppercaseFirst selectorName}}(),
   ({{selectorName}}) => ({ {{selectorName}} })
 ), mapDispatchToProps)({{componentName}});
 {{else}}

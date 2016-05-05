@@ -5,6 +5,7 @@ module.exports = BaseGenerator.extend({
   constructor(args, options) {
     BaseGenerator.apply(this, arguments);
 
+    this.reducer = options.reducer;
     this.selectorName = options.selectorName;
     this.selectorsDirectory = 'selectors';
   },
@@ -20,7 +21,7 @@ module.exports = BaseGenerator.extend({
         message: 'What should your selector be called?',
         default: 'state',
         validate: value => {
-          return (/^[$A-Z_][0-9A-Z_$]*$/i).test(value);
+          return this.namingConventions.selectorName.regEx.test(value);
         }
       });
     }
@@ -40,6 +41,8 @@ module.exports = BaseGenerator.extend({
 
   writing: {
     everything() {
+      this.selectorName = this.namingConventions.selectorName.clean(this.selectorName);
+
       this.template(
         'selector.js.hbs',
         `${this.appDirectory}/${this.selectorsDirectory}/${this.selectorName}.js`

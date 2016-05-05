@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect';
 
-const selectPartOfAppState = (state) => state.get('<REDUCER>');
+const selectPartOfAppState = (state) => state.get({{#if reducer}}'{{reducer}}'{{else}}'<REDUCER_NAME_HERE>'{{/if}});
 
-const {{selectorName}}Selector = () => createSelector(
+const select{{uppercaseFirst selectorName}} = () => createSelector(
   selectPartOfAppState(),
   // you can add more selector here ...
   (partOfState) => partOfState
 );
 
-export default {{selectorName}}Selector;
+export default select{{uppercaseFirst selectorName}};

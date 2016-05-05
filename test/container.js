@@ -13,7 +13,7 @@ const expect = chai.expect;
 describe('generator-rn:container', () => {
   const containerName = 'MyContainer';
   const appDirectory = 'app';
-  const newSelectorName = 'new';
+  const newSelectorName = 'newData';
   const containerModule = `${appDirectory}/containers/${containerName}/index.js`;
   const stylesheetModule = `${appDirectory}/containers/${containerName}/styles.js`;
 
@@ -76,16 +76,16 @@ describe('generator-rn:container', () => {
     it('references selector in the container file', () => {
       const containerFile = `${appDirectory}/containers/${containerName}/index.js`;
       assert.fileContent(containerFile,
-        `import { ${newSelectorName}Selector } from '../selectors/${newSelectorName}';`
+        `import { selectNewData } from '../selectors/${newSelectorName}';`
       );
       assert.fileContent(containerFile,
-        `export default connect(createSelector(\n  ${newSelectorName}Selector(),`
+        `export default connect(createSelector(\n  selectNewData(),`
       );
     });
   });
 
   describe('container with existing selector', () => {
-    const selectorName = 'existingSelector';
+    const selectorName = 'existingData';
 
     before(done => {
       helpers.run(path.join(__dirname, '../generators/container'))
@@ -100,10 +100,10 @@ describe('generator-rn:container', () => {
     it('references selector in the container file', () => {
       const containerFile = `${appDirectory}/containers/${containerName}/index.js`;
       assert.fileContent(containerFile,
-        `import { ${selectorName}Selector } from '../selectors/${selectorName}';`
+        `import { selectExistingData } from '../selectors/${selectorName}';`
       );
       assert.fileContent(containerFile,
-        `export default connect(createSelector(\n  ${selectorName}Selector(),`
+        `export default connect(createSelector(\n  selectExistingData(),`
       );
     });
   });
