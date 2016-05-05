@@ -1,6 +1,5 @@
 /* globals which: false */
 
-// import yeoman from 'yeoman-generator';
 import BaseGenerator from '../base';
 import chalk from 'chalk';
 import yosay from 'yosay';
@@ -70,9 +69,9 @@ module.exports = BaseGenerator.extend({
             node: '>=4.3'
           },
           dependencies: {
-            'react-native': '^0.23.1',
+            'react-native': '^0.24.1',
             'react-redux': '^4.4.5',
-            'redux': '^3.4.0',
+            'redux': '^3.5.2',
             'redux-immutable': '^3.0.6',
             'redux-saga': '^0.9.5',
             'reselect': '^2.4.0'
