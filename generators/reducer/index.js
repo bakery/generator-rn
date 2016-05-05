@@ -14,6 +14,7 @@ module.exports = BaseGenerator.extend({
     }
 
     this.container = options.container;
+    this.reducerName = this.namingConventions.reducerName.clean(this.container);
   },
 
   configuring: {
@@ -63,11 +64,11 @@ module.exports = BaseGenerator.extend({
             type: 'ImportDefaultSpecifier',
             local: {
               type: 'Identifier',
-              name: `${this.container}Reducer`
+              name: `${this.reducerName}`
             },
             imported: {
               type: 'Identifier',
-              name: `${this.container}Reducer`
+              name: `${this.reducerName}`
             }
           }
         ],
@@ -92,12 +93,12 @@ module.exports = BaseGenerator.extend({
           type: 'Property',
           key: {
             type: 'Identifier',
-            name: this.container
+            name: this.reducerName
           },
           computed: false,
           value: {
             type: 'Identifier',
-            name: `${this.container}Reducer`
+            name: this.reducerName
           },
           kind: 'init',
           method: false,

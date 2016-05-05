@@ -69,6 +69,12 @@ module.exports = yeoman.Base.extend({
         clean: name => {
           return this.helpers.pascal(name);
         }
+      },
+
+      reducerName: {
+        clean: name => {
+          return this.helpers.camelCase(name);
+        }
       }
     };
 

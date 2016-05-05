@@ -13,7 +13,7 @@ const expect = chai.expect;
 
 describe('generator-rn:reducer', () => {
   const appDirectory = 'app';
-  const container = 'MyNewContainer';
+  const container = 'Comments';
 
   describe('without existing reducers module', () => {
     before(done => {
@@ -42,10 +42,10 @@ describe('generator-rn:reducer', () => {
       const reducersModulePath = `${appDirectory}/reducers.js`;
       assert.file(reducersModulePath);
       assert.fileContent(reducersModulePath,
-        `import ${container}Reducer from './containers/${container}/reducer'`
+        `import comments from './containers/${container}/reducer'`
       );
       assert.fileContent(reducersModulePath,
-        `${container}: ${container}Reducer`
+        `comments: comments`
       );
     });
   });
