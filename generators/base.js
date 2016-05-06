@@ -1,95 +1,22 @@
 import yeoman from 'yeoman-generator';
 import _ from 'lodash';
-import s from 'underscore.string';
 import changeCase from 'change-case';
 import fs from 'fs';
 import Handlebars from 'handlebars';
 import esprima from 'esprima';
 import escodegen from 'escodegen';
-
-_.mixin(s.exports());
+import escodegenOptions from './escodegen';
+import esprimaOptions from './esprima';
+import namingConventions from './naming';
 
 module.exports = yeoman.Base.extend({
   constructor() {
     yeoman.Base.apply(this, arguments);
 
     this.appDirectory = 'app';
-
-    this.helpers = _.extend({}, changeCase);
-
-    this.escodegenOptions = {
-      format: {
-        indent: {
-          style: '  ',
-          base: 0,
-          adjustMultilineComment: false,
-          preserveBlankLines: true
-        },
-        newline: '\n',
-        space: ' ',
-        json: false,
-        renumber: false,
-        hexadecimal: false,
-        quotes: 'single',
-        escapeless: false,
-        compact: false,
-        parentheses: true,
-        semicolons: true,
-        safeConcatenation: false
-      },
-      moz: {
-        starlessGenerator: false,
-        parenthesizedComprehensionBlock: false,
-        comprehensionExpressionStartsWithAssignment: false
-      },
-      parse: esprima.parse,
-      comment: true,
-      sourceMap: undefined,
-      sourceMapRoot: null,
-      sourceMapWithCode: false,
-      file: undefined,
-      // sourceContent: originalSource,
-      directive: false,
-      verbatim: undefined
-    };
-
-    this.esprimaOptions = {
-      sourceType: 'module',
-      comment: true,
-      range: true,
-      loc: true,
-      tokens: true,
-      raw: false
-    };
-
-    this.namingConventions = {
-      componentName: {
-        regEx: /^[A-Z][0-9A-Z]*$/i,
-        clean: name => {
-          return this.helpers.pascal(name);
-        }
-      },
-
-      reducerName: {
-        clean: name => {
-          return this.helpers.camelCase(name);
-        }
-      },
-
-      selectorName: {
-        regEx: /^[A-Z][0-9A-Z]*$/i,
-        clean: name => {
-          return this.helpers.camelCase(name);
-        }
-      },
-
-      sagaName: {
-        regEx: /^[A-Z][0-9A-Z]*$/i,
-        clean: name => {
-          return this.helpers.camelCase(name);
-        }
-      }
-    };
+    this.escodegenOptions = escodegenOptions;
+    this.esprimaOptions = esprimaOptions;
+    this.namingConventions = namingConventions;
 
     Handlebars.registerHelper('uppercaseFirst', text => changeCase.upperCaseFirst(text));
 
