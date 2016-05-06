@@ -68,6 +68,10 @@ module.exports = BaseGenerator.extend({
           engines: {
             node: '>=4.3'
           },
+          scripts: {
+            'build-ios': 'node node_modules/react-native/local-cli/cli.js bundle --entry-file index.ios.js --bundle-output iOS/main.jsbundle --platform "ios" --assets-dest ./  --dev false --reset-cache',
+            'build-android': 'node node_modules/react-native/local-cli/cli.js bundle --entry-file index.android.js --bundle-output iOS/main.jsbundle --platform "android" --assets-dest ./  --dev false --reset-cache'
+          },
           dependencies: {
             'react-native': '^0.24.1',
             'react-redux': '^4.4.5',
