@@ -76,7 +76,7 @@ describe('generator-rn:container', () => {
     it('references selector in the container file', () => {
       const containerFile = `${appDirectory}/containers/${containerName}/index.js`;
       assert.fileContent(containerFile,
-        `import { selectNewData } from '../selectors/${newSelectorName}';`
+        `import { selectNewData } from '../../selectors/${newSelectorName}';`
       );
       assert.fileContent(containerFile,
         `export default connect(createSelector(\n  selectNewData(),`
@@ -100,7 +100,7 @@ describe('generator-rn:container', () => {
     it('references selector in the container file', () => {
       const containerFile = `${appDirectory}/containers/${containerName}/index.js`;
       assert.fileContent(containerFile,
-        `import { selectExistingData } from '../selectors/${selectorName}';`
+        `import { selectExistingData } from '../../selectors/${selectorName}';`
       );
       assert.fileContent(containerFile,
         `export default connect(createSelector(\n  selectExistingData(),`
