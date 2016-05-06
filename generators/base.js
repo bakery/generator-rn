@@ -14,8 +14,6 @@ module.exports = yeoman.Base.extend({
     yeoman.Base.apply(this, arguments);
 
     this.appDirectory = 'app';
-    this.escodegenOptions = escodegenOptions;
-    this.esprimaOptions = esprimaOptions;
     this.namingConventions = namingConventions;
 
     Handlebars.registerHelper('uppercaseFirst', text => changeCase.upperCaseFirst(text));
@@ -28,9 +26,14 @@ module.exports = yeoman.Base.extend({
     };
 
     this.parseJSSource = content => {
-      let tree = esprima.parse(content, this.esprimaOptions);
+      let tree = esprima.parse(content, esprimaOptions);
       tree = escodegen.attachComments(tree, tree.comments, tree.tokens);
       return tree;
+    };
+
+    this.generateJSFile = (ast, path) => {
+      const content = escodegen.generate(ast, escodegenOptions);
+      this.write(path, content);
     };
   },
 

@@ -1,5 +1,4 @@
 import BaseGenerator from '../base';
-import escodegen from 'escodegen';
 import _ from 'lodash';
 
 module.exports = BaseGenerator.extend({
@@ -112,12 +111,7 @@ module.exports = BaseGenerator.extend({
       }
 
       try {
-        const statements = escodegen.generate(reducersModule, this.escodegenOptions);
-        this.conflicter.ignore = true;
-        this.write(
-          this.destinationPath(reducersModulePath),
-          statements
-        );
+        this.generateJSFile(reducersModule, reducersModulePath);
       } catch (e) {
         console.error('error generating reducers.js', e);
       }

@@ -1,5 +1,4 @@
 import BaseGenerator from '../base';
-import escodegen from 'escodegen';
 import _ from 'lodash';
 
 module.exports = BaseGenerator.extend({
@@ -87,8 +86,7 @@ module.exports = BaseGenerator.extend({
       });
 
       try {
-        const statements = escodegen.generate(sagasModule, this.escodegenOptions);
-        this.write(sagasIndex, statements);
+        this.generateJSFile(sagasModule, sagasIndex);
       } catch (e) {
         console.error('error generating sagas/index.js', e);
       }
