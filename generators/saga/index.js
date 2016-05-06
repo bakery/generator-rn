@@ -11,12 +11,12 @@ module.exports = BaseGenerator.extend({
       message: 'What should your saga be called?',
       default: 'talkToServer',
       validate: value => {
-        return (/^[$A-Z_][0-9A-Z_$]*$/i).test(value);
+        return this.namingConventions.sagaName.regEx.test(value);
       }
     }];
 
     this.prompt(prompts, answers => {
-      this.sagaName = answers.sagaName;
+      this.sagaName = this.namingConventions.sagaName.clean(answers.sagaName);
       done();
     });
   },
@@ -70,12 +70,8 @@ module.exports = BaseGenerator.extend({
       }, ...sagasModule.body];
 
       const sagasList = _.find(sagasModule.body, d => {
-        // XX: find const sagas = [SAGAS HERE];
         return d.type === 'VariableDeclaration' &&
           d.declarations[0].id.name === 'sagas';
-
-        // return d.type === 'ExportDefaultDeclaration' &&
-        //   d.declaration && d.declaration.type === 'ArrayExpression';
       });
 
       if (!sagasList) {
@@ -91,15 +87,6 @@ module.exports = BaseGenerator.extend({
       });
 
       try {
-        // XX: for some odd reason passing a 'normal' AST
-        // produced by esprima causes escodegen to throw
-        // const statements = sagasModule.body.map(s => {
-        //   const str = escodegen.generate(s, this.escodegenOptions);
-        //   return str;
-        // });
-
-        // this.write(sagasIndex, statements.join('\n'));
-
         const statements = escodegen.generate(sagasModule, this.escodegenOptions);
         this.write(sagasIndex, statements);
       } catch (e) {

@@ -81,6 +81,13 @@ module.exports = yeoman.Base.extend({
         clean: name => {
           return this.helpers.camelCase(name);
         }
+      },
+
+      sagaName: {
+        regEx: /^[A-Z][0-9A-Z]*$/i,
+        clean: name => {
+          return this.helpers.camelCase(name);
+        }
       }
     };
 
