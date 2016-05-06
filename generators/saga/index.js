@@ -93,12 +93,15 @@ module.exports = BaseGenerator.extend({
       try {
         // XX: for some odd reason passing a 'normal' AST
         // produced by esprima causes escodegen to throw
-        const statements = sagasModule.body.map(s => {
-          const str = escodegen.generate(s, this.escodegenOptions);
-          return str;
-        });
+        // const statements = sagasModule.body.map(s => {
+        //   const str = escodegen.generate(s, this.escodegenOptions);
+        //   return str;
+        // });
 
-        this.write(sagasIndex, statements.join('\n'));
+        // this.write(sagasIndex, statements.join('\n'));
+
+        const statements = escodegen.generate(sagasModule, this.escodegenOptions);
+        this.write(sagasIndex, statements);
       } catch (e) {
         console.error('error generating sagas/index.js', e);
       }

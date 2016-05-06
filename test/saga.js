@@ -55,29 +55,34 @@ describe('generator-rn:saga', () => {
     });
   });
 
-  // XX: fix conflict jazz
-  // describe('with existing saga index file', () => {
-  //   before(done => {
-  //     helpers.run(path.join(__dirname, '../generators/saga'))
-  //       .inTmpDir(function (dir) {
-  //         // mkdirp(path.resolve(dir, `${appDirectory}/containers/${container}`), done);
-  //         // console.error('@@', dir);
-  //         fs.mkdirsSync(path.join(dir, appDirectory, 'sagas'));
-  //         fs.copySync(
-  //           path.join(__dirname, './fixtures/sagas.index.js.template'),
-  //           path.join(dir, `${appDirectory}/sagas/index.js`)
-  //         );
-  //       })
-  //       .withPrompts({
-  //         sagaName
-  //       }).on('ready', function (generator) {
-  //       }).on('end', done);
-  //   });
+  describe('with existing saga index file', () => {
+    before(done => {
+      helpers.run(path.join(__dirname, '../generators/saga'))
+        .inTmpDir(dir => {
+          fs.copySync(
+            path.join(__dirname, './fixtures/sagas.index.js.template'),
+            path.join(dir, `${appDirectory}/sagas/index.js`)
+          );
+        })
+        .withArguments(['--force'])
+        .withPrompts({
+          sagaName
+        }).on('ready', generator => {}).on('end', done);
+    });
 
-  //   it('keeps original sagas', () => {
-  //     assert.fileContent(`${appDirectory}/sagas/index.js`,
-  //       'import anotherSaga from \'./anotherSaga\';'
-  //     );
-  //   });
-  // });
+    it('keeps original sagas', () => {
+      assert.fileContent(`${appDirectory}/sagas/index.js`,
+        'import anotherSaga from \'./anotherSaga\';'
+      );
+    });
+
+    it('adds new saga module', () => {
+      assert.file(`${appDirectory}/sagas/${sagaName}.js`);
+    });
+
+    it('references new saga module in sagas/index.js', () => {
+      assert.fileContent(`${appDirectory}/sagas/index.js`,
+        `import ${sagaName} from './${sagaName}'`);
+    });
+  });
 });
