@@ -41,7 +41,7 @@ describe('generator-rn:saga', () => {
 
     it('imports new saga in sagas/index.js', () => {
       assert.fileContent(`${appDirectory}/sagas/index.js`,
-        `import ${sagaName} from './${sagaName}';`
+        `import { ${sagaName} } from './${sagaName}';`
       );
     });
 
@@ -72,7 +72,7 @@ describe('generator-rn:saga', () => {
 
     it('keeps original sagas', () => {
       assert.fileContent(`${appDirectory}/sagas/index.js`,
-        'import anotherSaga from \'./anotherSaga\';'
+        'import { anotherSaga } from \'./anotherSaga\';'
       );
     });
 
@@ -82,7 +82,7 @@ describe('generator-rn:saga', () => {
 
     it('references new saga module in sagas/index.js', () => {
       assert.fileContent(`${appDirectory}/sagas/index.js`,
-        `import ${sagaName} from './${sagaName}'`);
+        `import { ${sagaName} } from './${sagaName}'`);
     });
   });
 });

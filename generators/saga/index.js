@@ -51,7 +51,7 @@ module.exports = BaseGenerator.extend({
         type: 'ImportDeclaration',
         specifiers: [
           {
-            type: 'ImportDefaultSpecifier',
+            type: 'ImportSpecifier',
             local: {
               type: 'Identifier',
               name: this.sagaName
