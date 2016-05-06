@@ -52,7 +52,11 @@ module.exports = BaseGenerator.extend({
       type: 'input',
       name: 'selectorName',
       message: 'What is the name for the new selector?',
-      default: 'data',
+      default: answers => {
+        return this.namingConventions.selectorName.clean(
+          answers.containerName
+        );
+      },
       validate: value => {
         return (/^[$A-Z_][0-9A-Z_$]*$/i).test(value);
       },

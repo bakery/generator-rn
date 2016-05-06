@@ -15,11 +15,15 @@ module.exports = BaseGenerator.extend({
     const prompts = [];
 
     if (!this.selectorName) {
+      const defaultSelectorName = this.reducer ?
+        this.namingConventions.selectorName.clean(this.reducer) :
+        'state';
+
       prompts.push({
         type: 'input',
         name: 'selectorName',
         message: 'What should your selector be called?',
-        default: 'state',
+        default: defaultSelectorName,
         validate: value => {
           return this.namingConventions.selectorName.regEx.test(value);
         }
