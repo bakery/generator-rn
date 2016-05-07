@@ -5,9 +5,12 @@ module.exports = BaseGenerator.extend({
   constructor(args, options) {
     BaseGenerator.apply(this, arguments);
 
-    this.reducer = options.reducer;
-    this.selectorName = options.selectorName;
     this.selectorsDirectory = 'selectors';
+    this.selectorName = options.selectorName;
+    this.containerName = options.containerName;
+    this.reducer = this.namingConventions.reducerName.clean(
+      this.containerName
+    );
   },
 
   prompting() {
@@ -46,11 +49,11 @@ module.exports = BaseGenerator.extend({
   writing: {
     everything() {
       this.selectorName = this.namingConventions.selectorName.clean(this.selectorName);
+      const selectorPath = `${this.appDirectory}/${this.selectorsDirectory}/${this.selectorName}.js`;
 
-      this.template(
-        'selector.js.hbs',
-        `${this.appDirectory}/${this.selectorsDirectory}/${this.selectorName}.js`
-      );
+      if (!this._fileExists(this.destinationPath(selectorPath))) {
+        this.template('selector.js.hbs', selectorPath);
+      }
     }
   }
 });

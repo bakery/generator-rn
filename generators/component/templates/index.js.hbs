@@ -15,15 +15,7 @@ import select{{uppercaseFirst selectorName}} from '../../selectors/{{selectorNam
   {{/if}}
 {{/if}}
 
-class {{componentName}} extends Component {
-  render() {
-    return (
-      <View>
-        <Text>{{componentName}}</Text>
-      </View>
-    );
-  }
-}
+{{{renderBoilerplate boilerplate}}}
 
 {{#if isContainer}}
 function mapDispatchToProps(dispatch) {

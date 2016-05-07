@@ -73,16 +73,10 @@ module.exports = BaseGenerator.extend({
         this.containerName = answers.containerName;
       }
 
+      this.skipSelector = answers.containerSelectorName === NO_SELECTOR_PROMPT;
+
       if (answers.containerSelectorName === NEW_SELECTOR_PROMPT) {
         this.selectorName = answers.selectorName;
-        this.composeWith('selector', {
-          options: {
-            selectorName: answers.selectorName,
-            reducer: this.namingConventions.reducerName.clean(this.containerName)
-          }
-        }, {
-          local: require.resolve('../selector')
-        });
       } else if (answers.containerSelectorName !== NO_SELECTOR_PROMPT) {
         this.selectorName = answers.containerSelectorName;
       }
@@ -105,21 +99,6 @@ module.exports = BaseGenerator.extend({
   },
 
   writing: {
-    component() {
-      let options = {
-        componentName: this.containerName,
-        isContainer: true
-      };
-
-      if (this.selectorName !== NO_SELECTOR_PROMPT) {
-        options.selectorName = this.selectorName;
-      }
-
-      this.composeWith('rn:component', {options}, {
-        local: require.resolve('../component')
-      });
-    },
-
     reducer() {
       if (this.addReducer) {
         this.composeWith('rn:reducer', {
@@ -130,6 +109,31 @@ module.exports = BaseGenerator.extend({
           local: require.resolve('../reducer')
         });
       }
+    },
+
+    selector() {
+      if (!this.skipSelector) {
+        this.composeWith('rn:selector', {
+          options: {
+            selectorName: this.selectorName,
+            containerName: this.containerName
+          }
+        }, {
+          local: require.resolve('../selector')
+        });
+      }
+    },
+
+    component() {
+      this.composeWith('rn:component', {
+        options: {
+          componentName: this.containerName,
+          isContainer: true,
+          selectorName: this.selectorName
+        }
+      }, {
+        local: require.resolve('../component')
+      });
     }
   }
 });

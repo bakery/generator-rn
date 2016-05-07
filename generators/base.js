@@ -8,6 +8,7 @@ import escodegen from 'escodegen';
 import escodegenOptions from './escodegen';
 import esprimaOptions from './esprima';
 import namingConventions from './naming';
+import shell from 'shelljs';
 
 module.exports = yeoman.Base.extend({
   constructor() {
@@ -17,6 +18,10 @@ module.exports = yeoman.Base.extend({
     this.namingConventions = namingConventions;
 
     Handlebars.registerHelper('uppercaseFirst', text => changeCase.upperCaseFirst(text));
+    Handlebars.registerHelper('renderBoilerplate', boilerplate => {
+      const t = this.read(`./boilerplates/${boilerplate}.js.hbs`);
+      return Handlebars.compile(t)(this);
+    });
 
     this.template = (source, destination, data) => {
       // XX: override Yo's standard template method to use Handlebars templates
@@ -53,6 +58,16 @@ module.exports = yeoman.Base.extend({
   _dropHBSExtension(fileName) {
     const parts = fileName.split('.hbs');
     return parts.length === 2 ? parts[0] : fileName;
+  },
+
+  _listAvailableBoilerPlates() {
+    const boilerplatesPath = this.templatePath('./boilerplates');
+    return shell.find(boilerplatesPath).filter(function (file) {
+      return file.match(/\.js.hbs$/i);
+    }).map(file => {
+      return (/\/(.*)\.js\.hbs$/ig).exec(
+        file.split(boilerplatesPath)[1])[1];
+    });
   },
 
   dummyMethod() {

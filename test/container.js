@@ -12,6 +12,7 @@ const expect = chai.expect;
 
 describe('generator-rn:container', () => {
   const containerName = 'MyContainer';
+  const boilerplate = 'Vanila';
   const appDirectory = 'app';
   const newSelectorName = 'newData';
   const containerModule = `${appDirectory}/containers/${containerName}/index.js`;
@@ -22,6 +23,7 @@ describe('generator-rn:container', () => {
       helpers.run(path.join(__dirname, '../generators/container'))
         .withPrompts({
           containerName,
+          boilerplate,
           addReducer: false
         }).on('ready', function (generator) {
         }).on('end', done);
@@ -61,6 +63,8 @@ describe('generator-rn:container', () => {
       helpers.run(path.join(__dirname, '../generators/container'))
         .withPrompts({
           containerName,
+          boilerplate,
+          addReducer: false,
           containerSelectorName: 'New Selector',
           selectorName: newSelectorName
         }).on('ready', function (generator) {
@@ -91,6 +95,8 @@ describe('generator-rn:container', () => {
       helpers.run(path.join(__dirname, '../generators/container'))
         .withPrompts({
           containerName,
+          boilerplate,
+          addReducer: false,
           containerSelectorName: selectorName,
           selectorName
         }).on('ready', function (generator) {
@@ -105,6 +111,28 @@ describe('generator-rn:container', () => {
       assert.fileContent(containerFile,
         `export default connect(createSelector(\n  selectExistingData,`
       );
+    });
+  });
+
+  describe('container with a reducer', () => {
+    before(done => {
+      helpers.run(path.join(__dirname, '../generators/container'))
+        .withPrompts({
+          containerName,
+          boilerplate,
+          addReducer: true
+        }).on('ready', function (generator) {
+        }).on('end', done);
+    });
+
+    it('generates reducer related files', () => {
+      assert.file([
+        'actions.js',
+        'actions.test.js',
+        'constants.js',
+        'reducer.js',
+        'reducer.test.js'
+      ].map(f => `${appDirectory}/containers/${containerName}/${f}`));
     });
   });
 });

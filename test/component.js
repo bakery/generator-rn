@@ -12,6 +12,7 @@ const expect = chai.expect;
 
 describe('generator-rn:component', () => {
   const componentName = 'MyComponent';
+  const boilerplate = 'Vanila';
   const appDirectory = 'app';
   const componentModule = `${appDirectory}/components/${componentName}/index.js`;
   const stylesheetModule = `${appDirectory}/components/${componentName}/styles.js`;
@@ -19,7 +20,8 @@ describe('generator-rn:component', () => {
   before(done => {
     helpers.run(path.join(__dirname, '../generators/component'))
       .withPrompts({
-        componentName
+        componentName,
+        boilerplate
       }).on('ready', function (generator) {
       }).on('end', done);
   });

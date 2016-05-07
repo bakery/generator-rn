@@ -120,7 +120,6 @@ module.exports = BaseGenerator.extend({
     });
 
     this.bulkDirectory('app', this.appDirectory);
-
     this.composeWith('component', {
       options: {
         componentName: 'App',

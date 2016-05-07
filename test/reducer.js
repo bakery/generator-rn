@@ -49,46 +49,4 @@ describe('generator-rn:reducer', () => {
       );
     });
   });
-
-  // XX: cannot get this to work with because of the conflict
-  // describe('with existing reducers module', () => {
-  //   const reducersModulePath = `${appDirectory}/reducers.js`;
-
-  //   before(done => {
-  //     helpers.run(path.join(__dirname, '../generators/reducer'))
-  //     .inTmpDir(function (dir) {
-  //       // mkdirp(path.resolve(dir, `${appDirectory}/containers/${container}`), done);
-  //       // console.error('@@', dir);
-  //       fs.mkdirsSync(path.join(dir, appDirectory));
-  //       fs.copySync(
-  //         path.join(__dirname, './fixtures/reducers.js.template'),
-  //         path.join(dir, `${appDirectory}/reducers.js`)
-  //       );
-  //     })
-  //     .withOptions({
-  //       appDirectory,
-  //       container
-  //     })
-  //     .on('ready', function (generator) {
-  //     }).on('end', done);
-  //   });
-
-  //   it('keeps existing reducers exports', () => {
-  //     assert.fileContent(reducersModulePath,
-  //       'import HomeReducer from \'./containers/Home/reducer\''
-  //     );
-  //     assert.fileContent(reducersModulePath,
-  //       'home: HomeReducer'
-  //     );
-  //   });
-
-  //   it('updates root reducers file with new reducer info', () => {
-  //     assert.fileContent(reducersModulePath,
-  //       `import ${container}Reducer from './containers/${container}/reducer'`
-  //     );
-  //     assert.fileContent(reducersModulePath,
-  //       `${container}: ${container}Reducer`
-  //     );
-  //   });
-  // });
 });
