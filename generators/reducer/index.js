@@ -31,7 +31,7 @@ module.exports = BaseGenerator.extend({
   writing: {
     everything() {
       this.files.forEach(f => {
-        this.template(f, `${this.appDirectory}/containers/${this.container}/${this._dropHBSExtension(f)}`);
+        this.template(f, `${this.appDirectory}/components/${this.container}/${this._dropHBSExtension(f)}`);
       });
     },
 
@@ -73,8 +73,8 @@ module.exports = BaseGenerator.extend({
         ],
         source: {
           type: 'Literal',
-          value: `./containers/${this.container}/reducer`,
-          raw: `'./containers/${this.container}/reducer'`
+          value: `./components/${this.container}/reducer`,
+          raw: `'./components/${this.container}/reducer'`
         }
       }, ...reducersModule.body];
 

@@ -74,10 +74,9 @@ module.exports = BaseGenerator.extend({
 
   writing: {
     everything() {
-      const componentOrContainer = this.isContainer ? 'containers' : 'components';
       this.files.forEach(f => {
         this.template(f,
-          `${this.appDirectory}/${componentOrContainer}/${this.componentName}/${this._dropHBSExtension(f)}`);
+          `${this.appDirectory}/components/${this.componentName}/${this._dropHBSExtension(f)}`);
       });
     }
   }

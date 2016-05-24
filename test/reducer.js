@@ -35,14 +35,14 @@ describe('generator-rn:reducer', () => {
         'actions.js',
         'actions.test.js',
         'constants.js'
-      ].map(f => `${appDirectory}/containers/${container}/${f}`));
+      ].map(f => `${appDirectory}/components/${container}/${f}`));
     });
 
     it('updates root reducers file with new reducer info', () => {
       const reducersModulePath = `${appDirectory}/reducers.js`;
       assert.file(reducersModulePath);
       assert.fileContent(reducersModulePath,
-        `import comments from './containers/${container}/reducer'`
+        `import comments from './components/${container}/reducer'`
       );
       assert.fileContent(reducersModulePath,
         `comments: comments`

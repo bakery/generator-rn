@@ -15,8 +15,8 @@ describe('generator-rn:container', () => {
   const boilerplate = 'Vanila';
   const appDirectory = 'app';
   const newSelectorName = 'newData';
-  const containerModule = `${appDirectory}/containers/${containerName}/index.js`;
-  const stylesheetModule = `${appDirectory}/containers/${containerName}/styles.js`;
+  const containerModule = `${appDirectory}/components/${containerName}/index.js`;
+  const stylesheetModule = `${appDirectory}/components/${containerName}/styles.js`;
 
   describe('simple container', () => {
     before(done => {
@@ -33,7 +33,7 @@ describe('generator-rn:container', () => {
       assert.file([
         'index.js',
         'test.js'
-      ].map(f => `${appDirectory}/containers/${containerName}/${f}`));
+      ].map(f => `${appDirectory}/components/${containerName}/${f}`));
 
       assert.noFile([
         'actions.js',
@@ -41,7 +41,7 @@ describe('generator-rn:container', () => {
         'constants.js',
         'reducer.js',
         'reducer.test.js'
-      ].map(f => `${appDirectory}/containers/${containerName}/${f}`));
+      ].map(f => `${appDirectory}/components/${containerName}/${f}`));
     });
 
     it('exposes component wrapped into connect', () => {
@@ -78,7 +78,7 @@ describe('generator-rn:container', () => {
     });
 
     it('references selector in the container file', () => {
-      const containerFile = `${appDirectory}/containers/${containerName}/index.js`;
+      const containerFile = `${appDirectory}/components/${containerName}/index.js`;
       assert.fileContent(containerFile,
         `import selectNewData from '../../selectors/${newSelectorName}';`
       );
@@ -104,7 +104,7 @@ describe('generator-rn:container', () => {
     });
 
     it('references selector in the container file', () => {
-      const containerFile = `${appDirectory}/containers/${containerName}/index.js`;
+      const containerFile = `${appDirectory}/components/${containerName}/index.js`;
       assert.fileContent(containerFile,
         `import selectExistingData from '../../selectors/${selectorName}';`
       );
@@ -132,7 +132,7 @@ describe('generator-rn:container', () => {
         'constants.js',
         'reducer.js',
         'reducer.test.js'
-      ].map(f => `${appDirectory}/containers/${containerName}/${f}`));
+      ].map(f => `${appDirectory}/components/${containerName}/${f}`));
     });
   });
 });
