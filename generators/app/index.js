@@ -125,7 +125,8 @@ module.exports = BaseGenerator.extend({
     this.composeWith('component', {
       options: {
         componentName: 'App',
-        destinationRoot: this.destinationPath('.')
+        destinationRoot: this.destinationPath('.'),
+        boilerplate: 'Vanila'
       }
     }, {
       local: require.resolve('../component')

@@ -8,6 +8,7 @@ module.exports = BaseGenerator.extend({
     this.isContainer = options.isContainer;
     this.componentName = options.componentName;
     this.selectorName = options.selectorName;
+    this.boilerplate = options.boilerplate;
 
     if (options.destinationRoot) {
       this.destinationRoot(options.destinationRoot);
@@ -30,15 +31,17 @@ module.exports = BaseGenerator.extend({
       });
     }
 
-    prompts.push({
-      type: 'list',
-      name: 'boilerplate',
-      message: 'Which boilerplate do you want to use?',
-      default: 'Vanila',
-      choices: () => {
-        return this._listAvailableBoilerPlates();
-      }
-    });
+    if (!this.boilerplate) {
+      prompts.push({
+        type: 'list',
+        name: 'boilerplate',
+        message: 'Which boilerplate do you want to use?',
+        default: 'Vanila',
+        choices: () => {
+          return this._listAvailableBoilerPlates();
+        }
+      });
+    }
 
     if (prompts.length === 0) {
       done();
