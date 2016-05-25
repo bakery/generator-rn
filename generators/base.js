@@ -16,9 +16,10 @@ module.exports = yeoman.Base.extend({
 
     this.appDirectory = 'app';
     this.namingConventions = namingConventions;
+    this.Handlebars = Handlebars;
 
-    Handlebars.registerHelper('uppercaseFirst', text => changeCase.upperCaseFirst(text));
-    Handlebars.registerHelper('renderBoilerplate', boilerplate => {
+    this.Handlebars.registerHelper('uppercaseFirst', text => changeCase.upperCaseFirst(text));
+    this.Handlebars.registerHelper('renderBoilerplate', boilerplate => {
       const t = this.read(`./boilerplates/${boilerplate}.js.hbs`);
       return Handlebars.compile(t)(this);
     });

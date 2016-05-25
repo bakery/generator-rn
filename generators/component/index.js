@@ -13,6 +13,10 @@ module.exports = BaseGenerator.extend({
     if (options.destinationRoot) {
       this.destinationRoot(options.destinationRoot);
     }
+
+    this.Handlebars.registerPartial('mapDispatchAndPropsAndConnect',
+      this.read(this.templatePath('mapDispatchPropsAndConnect.js.hbs'))
+    );
   },
 
   prompting() {

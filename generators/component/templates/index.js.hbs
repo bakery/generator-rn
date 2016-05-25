@@ -15,29 +15,4 @@ import { createSelector } from 'reselect';
 import select{{uppercaseFirst selectorName}} from '../../selectors/{{selectorName}}';
   {{/if}}
 {{/if}}
-
 {{{renderBoilerplate boilerplate}}}
-
-{{#if isContainer}}
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-{{/if}}
-
-{{#if selectorName}}
-export default connect(createSelector(
-  select{{uppercaseFirst selectorName}},
-  ({{selectorName}}) => ({ {{selectorName}} })
-), mapDispatchToProps)({{componentName}});
-{{else}}
-  {{#if isContainer}}
-function mapStateToProps(state) {
-  return {}; 
-}
-export default connect(mapStateToProps, mapDispatchToProps)({{componentName}});
-  {{else}}
-export default {{componentName}};
-  {{/if}}
-{{/if}}
