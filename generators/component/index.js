@@ -36,10 +36,10 @@ module.exports = BaseGenerator.extend({
       });
     }
 
-    if (!this.boilerplate) {
+    if (!this.boilerplateName) {
       prompts.push({
         type: 'list',
-        name: 'boilerplate',
+        name: 'boilerplateName',
         message: 'Which boilerplate do you want to use?',
         default: 'Vanila',
         choices: () => {
@@ -58,7 +58,7 @@ module.exports = BaseGenerator.extend({
         this.componentName = answers.componentName;
       }
 
-      this.boilerplateName = answers.boilerplate;
+      this.boilerplateName = answers.boilerplateName;
       done();
     });
   },

@@ -68,7 +68,6 @@ module.exports = yeoman.Base.extend({
   },
 
   _renderBoilerplate(boilerplate) {
-    console.log('rendering template', this.templatePath(`./boilerplates/${boilerplate}.js.hbs`));
     const t = this.read(`./boilerplates/${boilerplate}.js.hbs`);
     return Handlebars.compile(t)(this);
   },
