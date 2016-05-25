@@ -23,7 +23,7 @@ describe('generator-rn:container', () => {
       helpers.run(path.join(__dirname, '../generators/container'))
         .withPrompts({
           containerName,
-          boilerplate,
+          boilerplateName: boilerplate,
           addReducer: false
         }).on('ready', function (generator) {
         }).on('end', done);
@@ -63,7 +63,7 @@ describe('generator-rn:container', () => {
       helpers.run(path.join(__dirname, '../generators/container'))
         .withPrompts({
           containerName,
-          boilerplate,
+          boilerplateName: boilerplate,
           addReducer: false,
           containerSelectorName: 'New Selector',
           selectorName: newSelectorName
@@ -95,7 +95,7 @@ describe('generator-rn:container', () => {
       helpers.run(path.join(__dirname, '../generators/container'))
         .withPrompts({
           containerName,
-          boilerplate,
+          boilerplateName: boilerplate,
           addReducer: false,
           containerSelectorName: selectorName,
           selectorName
@@ -117,9 +117,11 @@ describe('generator-rn:container', () => {
   describe('container with a reducer', () => {
     before(done => {
       helpers.run(path.join(__dirname, '../generators/container'))
+        .withOptions({
+          boilerplateName: boilerplate
+        })
         .withPrompts({
           containerName,
-          boilerplate,
           addReducer: true
         }).on('ready', function (generator) {
         }).on('end', done);

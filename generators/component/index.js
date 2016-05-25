@@ -8,7 +8,8 @@ module.exports = BaseGenerator.extend({
     this.isContainer = options.isContainer;
     this.componentName = options.componentName;
     this.selectorName = options.selectorName;
-    this.boilerplate = options.boilerplate;
+    this.boilerplateName = options.boilerplateName;
+    this.addReducer = options.addReducer;
 
     if (options.destinationRoot) {
       this.destinationRoot(options.destinationRoot);
@@ -57,7 +58,7 @@ module.exports = BaseGenerator.extend({
         this.componentName = answers.componentName;
       }
 
-      this.boilerplate = answers.boilerplate;
+      this.boilerplateName = answers.boilerplate;
       done();
     });
   },
@@ -73,10 +74,29 @@ module.exports = BaseGenerator.extend({
         'test.js.hbs',
         'styles.js.hbs'
       ];
+    },
+
+    boilerplate() {
+      if (this.boilerplateName) {
+        this.boilerplate = this._renderBoilerplate(this.boilerplateName);
+      }
     }
   },
 
   writing: {
+    reducer() {
+      if (this.addReducer) {
+        this.composeWith('rn:reducer', {
+          options: {
+            container: this.componentName,
+            boilerplateName: this.boilerplateName
+          }
+        }, {
+          local: require.resolve('../reducer')
+        });
+      }
+    },
+
     everything() {
       this.files.forEach(f => {
         this.template(f,

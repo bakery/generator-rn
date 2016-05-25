@@ -14,6 +14,7 @@ module.exports = BaseGenerator.extend({
 
     this.container = options.container;
     this.reducerName = this.namingConventions.reducerName.clean(this.container);
+    this.boilerplateName = options.boilerplateName || 'Vanila';
   },
 
   configuring: {
@@ -25,6 +26,12 @@ module.exports = BaseGenerator.extend({
         'reducer.js.hbs',
         'reducer.test.js.hbs'
       ];
+    },
+
+    boilerplate() {
+      if (this.boilerplateName) {
+        this.boilerplate = this._renderBoilerplate(this.boilerplateName);
+      }
     }
   },
 

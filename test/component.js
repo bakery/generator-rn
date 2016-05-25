@@ -21,7 +21,7 @@ describe('generator-rn:component', () => {
     helpers.run(path.join(__dirname, '../generators/component'))
       .withPrompts({
         componentName,
-        boilerplate
+        boilerplateName: boilerplate
       }).on('ready', function (generator) {
       }).on('end', done);
   });

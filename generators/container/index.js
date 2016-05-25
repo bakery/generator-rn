@@ -10,6 +10,7 @@ module.exports = BaseGenerator.extend({
 
     this.containerName = options.name;
     this.selectorName = null;
+    this.boilerplateName = options.boilerplateName;
   },
 
   prompting() {
@@ -99,18 +100,6 @@ module.exports = BaseGenerator.extend({
   },
 
   writing: {
-    reducer() {
-      if (this.addReducer) {
-        this.composeWith('rn:reducer', {
-          options: {
-            container: this.containerName
-          }
-        }, {
-          local: require.resolve('../reducer')
-        });
-      }
-    },
-
     selector() {
       if (!this.skipSelector) {
         this.composeWith('rn:selector', {
@@ -129,7 +118,9 @@ module.exports = BaseGenerator.extend({
         options: {
           componentName: this.containerName,
           isContainer: true,
-          selectorName: this.selectorName
+          addReducer: this.addReducer,
+          selectorName: this.selectorName,
+          boilerplateName: this.boilerplateName
         }
       }, {
         local: require.resolve('../component')

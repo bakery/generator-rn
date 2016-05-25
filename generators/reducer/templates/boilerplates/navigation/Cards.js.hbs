@@ -1,0 +1,30 @@
+import { NavigationExperimental } from 'react-native';
+
+const { Reducer: NavigationReducer } = NavigationExperimental;
+
+const {{reducerName}} = NavigationReducer.StackReducer({
+  getPushedReducerForAction: (action) => {
+    if (action.type === 'push') {
+      return (state) => (state || action.route);
+    }
+    return null;
+  },
+  initialState: {
+    key: '{{reducerName}}',
+    index: 0,
+    children: [
+      {
+        key: '{{reducerName}}-initial-card',
+        index: 0
+      },
+    ],
+  },
+});
+
+module.exports = (state, action) => {
+  if (action.scope && action.scope !== '{{reducerName}}') {
+    return state;
+  } else {
+    return {{reducerName}}(state, action);
+  }
+};

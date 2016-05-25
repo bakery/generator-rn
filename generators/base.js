@@ -19,10 +19,6 @@ module.exports = yeoman.Base.extend({
     this.Handlebars = Handlebars;
 
     this.Handlebars.registerHelper('uppercaseFirst', text => changeCase.upperCaseFirst(text));
-    this.Handlebars.registerHelper('renderBoilerplate', boilerplate => {
-      const t = this.read(`./boilerplates/${boilerplate}.js.hbs`);
-      return Handlebars.compile(t)(this);
-    });
 
     this.template = (source, destination, data) => {
       // XX: override Yo's standard template method to use Handlebars templates
@@ -69,6 +65,12 @@ module.exports = yeoman.Base.extend({
       return (/\/(.*)\.js\.hbs$/ig).exec(
         file.split(boilerplatesPath)[1])[1];
     });
+  },
+
+  _renderBoilerplate(boilerplate) {
+    console.log('rendering template', this.templatePath(`./boilerplates/${boilerplate}.js.hbs`));
+    const t = this.read(`./boilerplates/${boilerplate}.js.hbs`);
+    return Handlebars.compile(t)(this);
   },
 
   dummyMethod() {
