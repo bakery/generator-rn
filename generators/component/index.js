@@ -16,7 +16,7 @@ module.exports = BaseGenerator.extend({
     }
 
     this.Handlebars.registerPartial('mapDispatchAndPropsAndConnect',
-      this.read(this.templatePath('mapDispatchPropsAndConnect.js.hbs'))
+      this.read(this.templatePath('partials/mapDispatchPropsAndConnect.js.hbs'))
     );
   },
 
