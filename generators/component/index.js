@@ -10,6 +10,7 @@ module.exports = BaseGenerator.extend({
     this.selectorName = options.selectorName;
     this.boilerplateName = options.boilerplateName;
     this.addReducer = options.addReducer;
+    this.platformSpecific = options.platformSpecific;
 
     if (options.destinationRoot) {
       this.destinationRoot(options.destinationRoot);
@@ -48,6 +49,19 @@ module.exports = BaseGenerator.extend({
       });
     }
 
+    if (typeof this.platformSpecific === 'undefined') {
+      prompts.push({
+        type: 'confirm',
+        name: 'platformSpecific',
+        message: 'Do you separate versions of this component for iOS and Android?',
+        when: answers => {
+          const boilerplateName = this.boilerplateName || answers.boilerplateName;
+          return !this._isBoilerplatePlatformSpecific(boilerplateName);
+        },
+        default: false
+      });
+    }
+
     if (prompts.length === 0) {
       done();
       return;
@@ -58,28 +72,34 @@ module.exports = BaseGenerator.extend({
         this.componentName = answers.componentName;
       }
 
-      this.boilerplateName = answers.boilerplateName;
+      if (typeof answers.platformSpecific !== 'undefined') {
+        this.platformSpecific = answers.platformSpecific;
+      }
+
+      if (answers.boilerplateName) {
+        this.boilerplateName = answers.boilerplateName;
+      }
+
       done();
     });
   },
 
   configuring: {
+    platforms() {
+      if (this._isBoilerplatePlatformSpecific(this.boilerplateName)) {
+        this.platformSpecific = true;
+      }
+    },
+
     files() {
       this.componentName = this.namingConventions.componentName.clean(
         this.componentName
       );
 
       this.files = [
-        'index.js.hbs',
         'test.js.hbs',
         'styles.js.hbs'
       ];
-    },
-
-    boilerplate() {
-      if (this.boilerplateName) {
-        this.boilerplate = this._renderBoilerplate(this.boilerplateName);
-      }
     }
   },
 
@@ -102,6 +122,22 @@ module.exports = BaseGenerator.extend({
         this.template(f,
           `${this.appDirectory}/components/${this.componentName}/${this._dropHBSExtension(f)}`);
       });
+
+      if (this.platformSpecific) {
+        this.platforms.forEach(platform => {
+          this.template('index.js.hbs', `${this.appDirectory}/components/${this.componentName}/index.${platform}.js`,
+            Object.assign({}, this, {
+              boilerplate: this._renderBoilerplate(this.boilerplateName, platform)
+            })
+          );
+        });
+      } else {
+        this.template('index.js.hbs', `${this.appDirectory}/components/${this.componentName}/index.js`,
+          Object.assign({}, this, {
+            boilerplate: this._renderBoilerplate(this.boilerplateName)
+          })
+        );
+      }
     }
   }
 });

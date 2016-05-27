@@ -15,6 +15,7 @@ module.exports = yeoman.Base.extend({
     yeoman.Base.apply(this, arguments);
 
     this.appDirectory = 'app';
+    this.platforms = ['ios', 'android'];
     this.namingConventions = namingConventions;
     this.Handlebars = Handlebars;
 
@@ -59,17 +60,37 @@ module.exports = yeoman.Base.extend({
 
   _listAvailableBoilerPlates() {
     const boilerplatesPath = this.templatePath('./boilerplates');
-    return shell.find(boilerplatesPath).filter(function (file) {
-      return file.match(/\.js.hbs$/i);
-    }).map(file => {
-      return (/\/(.*)\.js\.hbs$/ig).exec(
-        file.split(boilerplatesPath)[1])[1];
-    });
+    return _.uniq(
+      shell.find(boilerplatesPath).filter(function (file) {
+        return file.match(/\.js.hbs$/i);
+      }).map(file => {
+        return (/\/([a-zA-Z0-9\/]+)(\.ios|\.android)?\.js\.hbs$/ig).exec(
+          file.split(boilerplatesPath)[1])[1];
+      })
+    );
   },
 
-  _renderBoilerplate(boilerplate) {
-    const t = this.read(`./boilerplates/${boilerplate}.js.hbs`);
-    return Handlebars.compile(t)(this);
+  _renderBoilerplate(boilerplate, platform) {
+    let template;
+    try {
+      // see if there's a boiler plate for this specific platorm
+      template = this.read(`./boilerplates/${boilerplate}.${platform}.js.hbs`);
+    } catch (e) {
+      template = this.read(`./boilerplates/${boilerplate}.js.hbs`);
+    }
+
+    return Handlebars.compile(template)(this);
+  },
+
+  _isBoilerplatePlatformSpecific(boilerplate) {
+    try {
+      this.platforms.forEach(platform => {
+        fs.statSync(this.templatePath(`./boilerplates/${boilerplate}.${platform}.js.hbs`));
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
   },
 
   dummyMethod() {

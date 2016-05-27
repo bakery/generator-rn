@@ -17,32 +17,53 @@ describe('generator-rn:component', () => {
   const componentModule = `${appDirectory}/components/${componentName}/index.js`;
   const stylesheetModule = `${appDirectory}/components/${componentName}/styles.js`;
 
-  before(done => {
-    helpers.run(path.join(__dirname, '../generators/component'))
+  describe('simple component', () => {
+    before(done => {
+      helpers.run(path.join(__dirname, '../generators/component'))
       .withPrompts({
         componentName,
         boilerplateName: boilerplate
       }).on('ready', function (generator) {
       }).on('end', done);
+    });
+
+    it('sets up all component jazz', () => {
+      assert.file([
+        'index.js',
+        'test.js',
+        'styles.js'
+      ].map(f => `${appDirectory}/components/${componentName}/${f}`));
+    });
+
+    it('exports component as-is without container wrapping', () => {
+      assert.fileContent(componentModule, `export default ${componentName}`);
+    });
+
+    it('generates a stylesheet', () => {
+      assert.file(stylesheetModule);
+    });
+
+    it('includes reference to the stylesheet', () => {
+      assert.fileContent(componentModule, `import styles from './styles';`);
+    });
   });
 
-  it('sets up all component jazz', () => {
-    assert.file([
-      'index.js',
-      'test.js',
-      'styles.js'
-    ].map(f => `${appDirectory}/components/${componentName}/${f}`));
-  });
+  describe('platform specific component', () => {
+    before(done => {
+      helpers.run(path.join(__dirname, '../generators/component'))
+      .withPrompts({
+        componentName,
+        boilerplateName: boilerplate,
+        platformSpecific: true
+      }).on('ready', function (generator) {
+      }).on('end', done);
+    });
 
-  it('exports component as-is without container wrapping', () => {
-    assert.fileContent(componentModule, `export default ${componentName}`);
-  });
-
-  it('generates a stylesheet', () => {
-    assert.file(stylesheetModule);
-  });
-
-  it('includes reference to the stylesheet', () => {
-    assert.fileContent(componentModule, `import styles from './styles';`);
+    it('sets up .ios and .android versions of the component', () => {
+      assert.file([
+        'index.ios.js',
+        'index.android.js'
+      ].map(f => `${appDirectory}/components/${componentName}/${f}`));
+    });
   });
 });
