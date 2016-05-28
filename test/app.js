@@ -19,7 +19,6 @@ describe('generator-rn:app', () => {
   const applicationName = 'MyReactApp';
   const applicationFiles = [
     'app/sagas/index.js',
-    'app/selectors/appSelector.js',
     'app/reducers.js',
     'app/setup.js',
     'app/store.js',

@@ -14,7 +14,6 @@ describe('generator-rn:container', () => {
   const containerName = 'MyContainer';
   const boilerplate = 'Vanila';
   const appDirectory = 'app';
-  const newSelectorName = 'newData';
   const containerModule = `${appDirectory}/components/${containerName}/index.js`;
   const stylesheetModule = `${appDirectory}/components/${containerName}/styles.js`;
 
@@ -58,62 +57,6 @@ describe('generator-rn:container', () => {
     });
   });
 
-  describe('container with new selector', () => {
-    before(done => {
-      helpers.run(path.join(__dirname, '../generators/container'))
-        .withPrompts({
-          containerName,
-          boilerplateName: boilerplate,
-          addReducer: false,
-          containerSelectorName: 'New Selector',
-          selectorName: newSelectorName
-        }).on('ready', function (generator) {
-        }).on('end', done);
-    });
-
-    it('creates a new selector file', () => {
-      assert.file([
-        `${appDirectory}/selectors/${newSelectorName}.js`
-      ]);
-    });
-
-    it('references selector in the container file', () => {
-      const containerFile = `${appDirectory}/components/${containerName}/index.js`;
-      assert.fileContent(containerFile,
-        `import selectNewData from '../../selectors/${newSelectorName}';`
-      );
-      assert.fileContent(containerFile,
-        `export default connect(createSelector(\n  selectNewData,`
-      );
-    });
-  });
-
-  describe('container with existing selector', () => {
-    const selectorName = 'existingData';
-
-    before(done => {
-      helpers.run(path.join(__dirname, '../generators/container'))
-        .withPrompts({
-          containerName,
-          boilerplateName: boilerplate,
-          addReducer: false,
-          containerSelectorName: selectorName,
-          selectorName
-        }).on('ready', function (generator) {
-        }).on('end', done);
-    });
-
-    it('references selector in the container file', () => {
-      const containerFile = `${appDirectory}/components/${containerName}/index.js`;
-      assert.fileContent(containerFile,
-        `import selectExistingData from '../../selectors/${selectorName}';`
-      );
-      assert.fileContent(containerFile,
-        `export default connect(createSelector(\n  selectExistingData,`
-      );
-    });
-  });
-
   describe('container with a reducer', () => {
     before(done => {
       helpers.run(path.join(__dirname, '../generators/container'))
@@ -135,6 +78,18 @@ describe('generator-rn:container', () => {
         'reducer.js',
         'reducer.test.js'
       ].map(f => `${appDirectory}/components/${containerName}/${f}`));
+    });
+
+    it('imports selector from the reducer module', () => {
+      assert.fileContent(`${appDirectory}/components/${containerName}/index.js`,
+        `import selectMyContainer from './reducer';`
+      );
+    });
+
+    it('references imported reducer in the connect set up', () => {
+      assert.fileContent(`${appDirectory}/components/${containerName}/index.js`,
+        `createSelector(selectMyContainer, (myContainer) => ({ myContainer }))`
+      );
     });
   });
 });

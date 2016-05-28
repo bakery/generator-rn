@@ -7,7 +7,6 @@ module.exports = BaseGenerator.extend({
     this.componentName = options.componentName;
     this.isContainer = options.isContainer;
     this.componentName = options.componentName;
-    this.selectorName = options.selectorName;
     this.boilerplateName = options.boilerplateName;
     this.addReducer = options.addReducer;
     this.platformSpecific = options.platformSpecific;
@@ -100,6 +99,20 @@ module.exports = BaseGenerator.extend({
         'test.js.hbs',
         'styles.js.hbs'
       ];
+    },
+
+    reducer() {
+      this.reducerName = this.namingConventions.reducerName.clean(
+        this.componentName
+      );
+    },
+
+    selector() {
+      if (this.addReducer) {
+        this.selectorName = this.namingConventions.selectorName.clean(
+          this.componentName
+        );
+      }
     }
   },
 
