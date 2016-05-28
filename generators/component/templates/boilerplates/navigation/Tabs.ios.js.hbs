@@ -45,7 +45,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     onNavigate: (action) => {
       dispatchProps.dispatch(
         Object.assign(action, {
-          scope: stateProps.{{selectorName}}.key
+          scope: action.scope || stateProps.{{selectorName}}.key
         })
       );
     }
