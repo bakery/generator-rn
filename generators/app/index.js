@@ -21,6 +21,8 @@ module.exports = BaseGenerator.extend({
     this.log(yosay(
       'Welcome to the sublime ' + chalk.red('Reactive Native') + ' generator!'
     ));
+
+    this.option('baker');
   },
 
   prompting() {
@@ -48,9 +50,10 @@ module.exports = BaseGenerator.extend({
     // check to see if destination directory is empty or not
     // if it's empty -> go ahead and do the thing
     // if not empty -> create a folder and use it as cwd
+    // except if this.options.baker is on
 
     const filesInDestinationDirectory = fs.readdirSync(this.destinationPath('.'));
-    if (filesInDestinationDirectory.length !== 0) {
+    if (filesInDestinationDirectory.length !== 0 && !this.options.baker) {
       fs.mkdirSync(this.destinationPath(this.applicationName));
       this.destinationRoot(this.destinationPath(this.applicationName));
     }
@@ -58,6 +61,10 @@ module.exports = BaseGenerator.extend({
 
   writing: {
     packageJSON() {
+      if (this.options.baker) {
+        return;
+      }
+
       this.fs.writeJSON(
         this.destinationPath('package.json'),
         {

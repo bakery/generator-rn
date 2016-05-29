@@ -8,6 +8,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import fsExtra from 'fs-extra';
 import fs from 'fs';
+import _ from 'lodash';
 
 const expect = chai.expect;
 
@@ -83,7 +84,7 @@ describe('generator-rn:app', () => {
     after(_unstubThings);
 
     it('sets things up in a newly created directory', () => {
-      expect(_generator.destinationPath('.').indexOf(applicationName)).to.be.ok;
+      expect(_generator.destinationPath('.').indexOf(applicationName) !== -1).to.be.ok;
       assert.file(applicationFiles);
     });
   });
@@ -109,6 +110,35 @@ describe('generator-rn:app', () => {
 
     it('bails on app generation', () => {
       expect(_abortSetupStub.calledOnce).to.be.ok;
+    });
+  });
+
+  describe('running generator in a non-empty directory with --baker flag', () => {
+    before(done => {
+      helpers.run(path.join(__dirname, '../generators/app'))
+        .inTmpDir(function (dir) {
+          fsExtra.copySync(
+            path.join(__dirname, './fixtures/random-file.txt'),
+            path.join(dir, 'random-file.txt')
+          );
+        })
+        .withOptions({baker: 'baker'})
+        .withPrompts({
+          name: applicationName
+        })
+        .on('ready', _stubThings)
+        .on('end', done);
+    });
+
+    after(_unstubThings);
+
+    it('sets up all the app files except for package.json', () => {
+      assert.file(_.filter(applicationFiles, f => f !== 'package.json'));
+      assert.noFile('package.json');
+    });
+
+    it('does not create a new directory', () => {
+      expect(_generator.destinationPath('.').indexOf(applicationName) === -1).to.be.ok;
     });
   });
 });
