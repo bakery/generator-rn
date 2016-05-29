@@ -9,8 +9,8 @@ function mapDispatchToProps(dispatch) {
 {{#if selectorName}}
 export default connect(
   createSelector({{selectorName}}, ({{reducerName}}) => ({ {{reducerName}} })),
-  mapDispatchToProps{{#if mergeProps}}, mergeProps{{/if}})({{componentName}}
-);
+  mapDispatchToProps{{#if mergeProps}}, mergeProps{{/if}}
+)({{componentName}});
 {{else}}
   {{#if isContainer}}
 function mapStateToProps(state) {

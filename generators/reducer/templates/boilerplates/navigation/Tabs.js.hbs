@@ -13,7 +13,7 @@ const tabsDefinitions = [
 ];
 
 const _{{reducerName}} = NavigationReducer.TabsReducer({
-  key: {{reducerName}},
+  key: '{{reducerName}}',
   initialIndex: 0,
   tabReducers: tabsDefinitions.map(t => (lastRoute) => lastRoute || t),
 });

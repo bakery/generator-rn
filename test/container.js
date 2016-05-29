@@ -82,7 +82,7 @@ describe('generator-rn:container', () => {
 
     it('imports selector from the reducer module', () => {
       assert.fileContent(`${appDirectory}/components/${containerName}/index.js`,
-        `import selectMyContainer from './reducer';`
+        `import { selectMyContainer } from './reducer';`
       );
     });
 

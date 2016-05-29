@@ -5,7 +5,7 @@ const { JumpToAction } = NavigationReducer.TabsReducer;
 
 class {{componentName}} extends Component {
   render() {
-    const children = this.props.{{selectorName}}.children.map( (tab, i) => {
+    const children = this.props.{{reducerName}}.children.map( (tab, i) => {
       return (
         <TabBarIOS.Item key={tab.key}
             icon={tab.icon}
@@ -13,7 +13,7 @@ class {{componentName}} extends Component {
             title={tab.title} onPress={
               () => this.props.onNavigate(JumpToAction(i))
             }
-            selected={this.props.{{selectorName}}.index === i}>
+            selected={this.props.{{reducerName}}.index === i}>
             { this._renderTabContent(tab) }
         </TabBarIOS.Item>
       );
@@ -45,7 +45,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     onNavigate: (action) => {
       dispatchProps.dispatch(
         Object.assign(action, {
-          scope: action.scope || stateProps.{{selectorName}}.key
+          scope: action.scope || stateProps.{{reducerName}}.key
         })
       );
     }
