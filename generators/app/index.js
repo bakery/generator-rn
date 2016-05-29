@@ -108,12 +108,17 @@ module.exports = BaseGenerator.extend({
 
   install: {
     setupRN() {
-      this.installDependencies({
-        bower: false,
-        callback: () => {
-          this._initRN();
-        }
-      });
+      const needsNpmInstall = !this.options.baker;
+      if (needsNpmInstall) {
+        this.installDependencies({
+          bower: false,
+          callback: () => {
+            this._initRN();
+          }
+        });
+      } else {
+        this._initRN();
+      }
     }
   },
 
