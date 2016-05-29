@@ -3,7 +3,7 @@
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
-  var distDirectory = 'lib';
+  var distDirectory = './generators';
 
   grunt.initConfig({
     babel: {
@@ -13,15 +13,16 @@ module.exports = function (grunt) {
       },
       dist: {
         files: [{
+          cwd: './src/generators',
           expand: true,
-          src: ['generators/*/*.js', 'generators/*.js'],
+          src: ['*/*.js', '*.js'],
           dest: distDirectory
         }]
       }
     },
 
     eslint: {
-      target: ['generators/*/*.js', 'test/**/*.js']
+      target: ['src/generators/*/*.js', 'test/**/*.js']
     },
 
     mochaTest: {
@@ -37,8 +38,9 @@ module.exports = function (grunt) {
     copy: {
       templates: {
         files: [{
+          cwd: './src/generators',
           expand: true,
-          src: ['generators/**/templates/**'],
+          src: ['**/templates/**'],
           dest: distDirectory
         }]
       }
