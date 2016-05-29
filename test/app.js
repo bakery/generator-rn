@@ -18,7 +18,6 @@ describe('generator-rn:app', () => {
   let _abortSetupStub = null;
   const applicationName = 'MyReactApp';
   const applicationFiles = [
-    'app/sagas/index.js',
     'app/reducers.js',
     'app/setup.js',
     'app/store.js',

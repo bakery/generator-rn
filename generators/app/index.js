@@ -71,7 +71,8 @@ module.exports = BaseGenerator.extend({
           scripts: {
             'build-ios': 'node node_modules/react-native/local-cli/cli.js bundle --entry-file index.ios.js --bundle-output iOS/main.jsbundle --platform "ios" --assets-dest ./  --dev false --reset-cache',
             'build-android': 'node node_modules/react-native/local-cli/cli.js bundle --entry-file index.android.js --bundle-output iOS/main.jsbundle --platform "android" --assets-dest ./  --dev false --reset-cache',
-            'ios': 'node node_modules/react-native/local-cli/cli.js run-ios'
+            'ios': 'node node_modules/react-native/local-cli/cli.js run-ios',
+            'android': 'node node_modules/react-native/local-cli/cli.js run-android'
           },
           dependencies: {
             'react': '15.0.2',
@@ -79,7 +80,6 @@ module.exports = BaseGenerator.extend({
             'react-redux': '^4.4.5',
             'redux': '^3.5.2',
             'redux-immutable': '^3.0.6',
-            'redux-saga': '^0.9.5',
             'reselect': '^2.4.0'
           },
           devDependencies: {
@@ -126,7 +126,8 @@ module.exports = BaseGenerator.extend({
       options: {
         componentName: 'App',
         destinationRoot: this.destinationPath('.'),
-        boilerplateName: 'Vanila'
+        boilerplateName: 'Vanila',
+        platformSpecific: false
       }
     }, {
       local: require.resolve('../component')
