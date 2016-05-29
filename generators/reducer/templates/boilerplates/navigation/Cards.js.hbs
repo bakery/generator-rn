@@ -2,7 +2,7 @@ import { NavigationExperimental } from 'react-native';
 
 const { Reducer: NavigationReducer } = NavigationExperimental;
 
-const {{reducerName}} = NavigationReducer.StackReducer({
+const _{{reducerName}} = NavigationReducer.StackReducer({
   getPushedReducerForAction: (action) => {
     if (action.type === 'push') {
       return (state) => (state || action.route);
@@ -21,10 +21,12 @@ const {{reducerName}} = NavigationReducer.StackReducer({
   },
 });
 
-module.exports = (state, action) => {
+const {{reducerName}} = (state, action) => {
   if (action.scope && action.scope !== '{{reducerName}}') {
     return state;
   } else {
-    return {{reducerName}}(state, action);
+    return _{{reducerName}}(state, action);
   }
 };
+
+export default {{reducerName}};

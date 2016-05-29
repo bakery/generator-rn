@@ -7,10 +7,10 @@ function mapDispatchToProps(dispatch) {
 {{/if}}
 
 {{#if selectorName}}
-export default connect(createSelector(
-  select{{uppercaseFirst selectorName}},
-  ({{selectorName}}) => ({ {{selectorName}} })
-), mapDispatchToProps{{#if mergeProps}}, mergeProps{{/if}})({{componentName}});
+export default connect(
+  createSelector({{selectorName}}, ({{reducerName}}) => ({ {{reducerName}} })),
+  mapDispatchToProps{{#if mergeProps}}, mergeProps{{/if}}
+)({{componentName}});
 {{else}}
   {{#if isContainer}}
 function mapStateToProps(state) {

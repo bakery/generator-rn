@@ -48,5 +48,19 @@ describe('generator-rn:reducer', () => {
         `comments: comments`
       );
     });
+
+    it('default exports newly created reducer ', () => {
+      const reducerModulePath = `${appDirectory}/components/${container}/reducer.js`;
+      assert.fileContent(reducerModulePath,
+        `export default comments`
+      );
+    });
+
+    it('exports a selector for the newly created reducer ', () => {
+      const reducerModulePath = `${appDirectory}/components/${container}/reducer.js`;
+      assert.fileContent(reducerModulePath,
+        `export function selectComments(state) {`
+      );
+    });
   });
 });

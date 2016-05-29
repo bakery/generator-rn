@@ -1,8 +1,4 @@
 import BaseGenerator from '../base';
-import SelectorUtilities from '../selector/utils';
-
-const NEW_SELECTOR_PROMPT = 'New Selector';
-const NO_SELECTOR_PROMPT = 'No Selector';
 
 module.exports = BaseGenerator.extend({
   constructor(args, options) {
@@ -37,19 +33,6 @@ module.exports = BaseGenerator.extend({
     });
 
     prompts.push({
-      type: 'list',
-      name: 'containerSelectorName',
-      message: 'Which selector do you want to use?',
-      choices: () => {
-        return [
-          ...SelectorUtilities.getExistingSelectors(this),
-          NEW_SELECTOR_PROMPT,
-          NO_SELECTOR_PROMPT
-        ];
-      }
-    });
-
-    prompts.push({
       type: 'input',
       name: 'selectorName',
       message: 'What is the name for the new selector?',
@@ -74,14 +57,6 @@ module.exports = BaseGenerator.extend({
         this.containerName = answers.containerName;
       }
 
-      this.skipSelector = answers.containerSelectorName === NO_SELECTOR_PROMPT;
-
-      if (answers.containerSelectorName === NEW_SELECTOR_PROMPT) {
-        this.selectorName = answers.selectorName;
-      } else if (answers.containerSelectorName !== NO_SELECTOR_PROMPT) {
-        this.selectorName = answers.containerSelectorName;
-      }
-
       this.addReducer = answers.addReducer;
 
       done();
@@ -100,19 +75,6 @@ module.exports = BaseGenerator.extend({
   },
 
   writing: {
-    selector() {
-      if (!this.skipSelector) {
-        this.composeWith('rn:selector', {
-          options: {
-            selectorName: this.selectorName,
-            containerName: this.containerName
-          }
-        }, {
-          local: require.resolve('../selector')
-        });
-      }
-    },
-
     component() {
       this.composeWith('rn:component', {
         options: {

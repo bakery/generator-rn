@@ -7,7 +7,7 @@ class {{componentName}} extends Component {
     return (
       <NavigationCardStack
         direction={ 'vertical' }
-        navigationState={ this.props.{{selectorName}} }
+        navigationState={ this.props.{{reducerName}} }
         onNavigate={ this.props.onNavigate }
         renderScene={ this._renderScene.bind(this) }
         renderOverlay={ this._renderHeader.bind(this) }

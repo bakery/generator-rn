@@ -19,7 +19,7 @@ class {{componentName}} extends Component {
 
     const navigationView = (
       <View style={ styles.container }>
-        {this.props.{{selectorName}}.children.map( (t, i) => {
+        {this.props.{{reducerName}}.children.map( (t, i) => {
           return (
             <TouchableHighlight
               onPress={ () => onNavigate(JumpToAction(i)) }
@@ -57,7 +57,7 @@ class {{componentName}} extends Component {
   }
 
   _renderContent() {
-    const selectedTab = this.props.{{selectorName}}.children[this.props.{{selectorName}}.index];
+    const selectedTab = this.props.{{reducerName}}.children[this.props.{{reducerName}}.index];
     const navigationIcon = { uri: 'http://placehold.it/56x56' };
     return (
       <View style={ styles.container }>
@@ -78,7 +78,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     onNavigate: (action) => {
       dispatchProps.dispatch(
         Object.assign(action, {
-          scope: action.scope || stateProps.{{selectorName}}.key
+          scope: action.scope || stateProps.{{reducerName}}.key
         })
       );
     }

@@ -12,7 +12,7 @@ import styles from './styles';
 import { connect } from 'react-redux';
   {{#if selectorName}}
 import { createSelector } from 'reselect';
-import select{{uppercaseFirst selectorName}} from '../../selectors/{{selectorName}}';
+import { {{selectorName}} } from './reducer';
   {{/if}}
 {{/if}}
 {{{boilerplate}}}
