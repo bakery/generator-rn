@@ -1,7 +1,7 @@
 {
   "name": "generator-rn",
-  "version": "0.0.0",
-  "description": "React native generator",
+  "version": "0.1.1",
+  "description": "React native Yeoman generator",
   "homepage": "",
   "author": {
     "name": "The Bakery",
