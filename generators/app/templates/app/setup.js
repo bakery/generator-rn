@@ -6,7 +6,7 @@ import configureStore from './store';
 const store = configureStore();
 
 function setup() {
-  class Root extends React.Component {
+  class Root extends Component {
     render() {
       return (
         <Provider store={store}>
