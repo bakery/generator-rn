@@ -19,7 +19,7 @@ describe('generator-rn:container', () => {
 
   describe('simple container', () => {
     before(done => {
-      helpers.run(path.join(__dirname, '../generators/container'))
+      helpers.run(path.join(__dirname, '../src/generators/container'))
         .withPrompts({
           containerName,
           boilerplateName: boilerplate,
@@ -59,7 +59,7 @@ describe('generator-rn:container', () => {
 
   describe('container with a reducer', () => {
     before(done => {
-      helpers.run(path.join(__dirname, '../generators/container'))
+      helpers.run(path.join(__dirname, '../src/generators/container'))
         .withOptions({
           boilerplateName: boilerplate
         })

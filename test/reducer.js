@@ -17,7 +17,7 @@ describe('generator-rn:reducer', () => {
 
   describe('without existing reducers module', () => {
     before(done => {
-      helpers.run(path.join(__dirname, '../generators/reducer'))
+      helpers.run(path.join(__dirname, '../src/generators/reducer'))
       .withOptions({
         container
       }).withPrompts({

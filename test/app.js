@@ -45,7 +45,7 @@ describe('generator-rn:app', () => {
 
   describe('simple generator', () => {
     before(done => {
-      helpers.run(path.join(__dirname, '../generators/app'))
+      helpers.run(path.join(__dirname, '../src/generators/app'))
         .on('ready', _stubThings)
         .on('end', done);
     });
@@ -67,7 +67,7 @@ describe('generator-rn:app', () => {
 
   describe('running generator in a non-empty directory', () => {
     before(done => {
-      helpers.run(path.join(__dirname, '../generators/app'))
+      helpers.run(path.join(__dirname, '../src/generators/app'))
         .inTmpDir(function (dir) {
           fsExtra.copySync(
             path.join(__dirname, './fixtures/random-file.txt'),
@@ -91,7 +91,7 @@ describe('generator-rn:app', () => {
 
   describe('running generator in a non-empty directory with something that looks like a RN app', () => {
     before(done => {
-      helpers.run(path.join(__dirname, '../generators/app'))
+      helpers.run(path.join(__dirname, '../src/generators/app'))
         .inTmpDir(function (dir) {
           // XX: make it look like a directory with some RN artifacts
           fs.mkdirSync(path.join(dir, 'android'));
@@ -114,13 +114,20 @@ describe('generator-rn:app', () => {
   });
 
   describe('running generator in a non-empty directory with --baker flag', () => {
+    let originalPackageJSON;
+
     before(done => {
-      helpers.run(path.join(__dirname, '../generators/app'))
+      helpers.run(path.join(__dirname, '../src/generators/app'))
         .inTmpDir(function (dir) {
           fsExtra.copySync(
             path.join(__dirname, './fixtures/random-file.txt'),
             path.join(dir, 'random-file.txt')
           );
+          fsExtra.copySync(
+            path.join(__dirname, './fixtures/package.json'),
+            path.join(dir, 'package.json')
+          );
+          originalPackageJSON = fsExtra.readJsonSync(path.join(__dirname, './fixtures/package.json'));
         })
         .withOptions({baker: 'baker'})
         .withPrompts({
@@ -132,13 +139,37 @@ describe('generator-rn:app', () => {
 
     after(_unstubThings);
 
-    it('sets up all the app files except for package.json', () => {
-      assert.file(_.filter(applicationFiles, f => f !== 'package.json'));
-      assert.noFile('package.json');
-    });
-
     it('does not create a new directory', () => {
       expect(_generator.destinationPath('.').indexOf(applicationName) === -1).to.be.ok;
+    });
+
+    it('sets up all the application files', () => {
+      assert.file(applicationFiles);
+    });
+
+    it('updates existing package.json with relevant data but also keeps original jazz in deps and scripts', () => {
+      const packageJSON = fsExtra.readJsonSync(_generator.destinationPath('package.json'));
+
+      expect(packageJSON.devDependencies).to.contain.all.keys(originalPackageJSON.devDependencies);
+      expect(packageJSON.scripts).to.contain.all.keys(originalPackageJSON.scripts);
+
+      expect(packageJSON.dependencies).to.contain.all.keys([
+        'react-redux',
+        'redux',
+        'redux-immutable',
+        'reselect'
+      ]);
+
+      expect(packageJSON.devDependencies).to.contain.all.keys([
+        'babel-eslint',
+        'babel-polyfill',
+        'eslint',
+        'eslint-loader',
+        'eslint-plugin-react',
+        'remote-redux-devtools'
+      ]);
+
+      expect(packageJSON.name).to.equal(applicationName);
     });
   });
 });

@@ -13,7 +13,7 @@ describe('base generator', () => {
   let _generator = null;
 
   before(done => {
-    helpers.run(path.join(__dirname, '../generators/base.js'))
+    helpers.run(path.join(__dirname, '../src/generators/base.js'))
       .on('ready', function (generator) {
         _generator = generator;
       }).on('end', done);

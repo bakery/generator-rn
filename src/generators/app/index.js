@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import yosay from 'yosay';
 import 'shelljs/global';
 import fs from 'fs';
+import fsExtra from 'fs-extra';
 
 module.exports = BaseGenerator.extend({
 
@@ -61,44 +62,56 @@ module.exports = BaseGenerator.extend({
 
   writing: {
     packageJSON() {
-      if (this.options.baker) {
-        return;
-      }
-
-      this.fs.writeJSON(
-        this.destinationPath('package.json'),
-        {
-          name: this.applicationName,
-          version: '1.0.0',
-          description: 'React Native app powered by Baker',
-          main: 'index.js',
-          engines: {
-            node: '>=4.3'
-          },
-          scripts: {
-            'build-ios': 'node node_modules/react-native/local-cli/cli.js bundle --entry-file index.ios.js --bundle-output iOS/main.jsbundle --platform "ios" --assets-dest ./  --dev false --reset-cache',
-            'build-android': 'node node_modules/react-native/local-cli/cli.js bundle --entry-file index.android.js --bundle-output iOS/main.jsbundle --platform "android" --assets-dest ./  --dev false --reset-cache',
-            'ios': 'node node_modules/react-native/local-cli/cli.js run-ios',
-            'android': 'node node_modules/react-native/local-cli/cli.js run-android'
-          },
-          dependencies: {
-            'react': '15.0.2',
-            'react-native': '^0.26.1',
-            'react-redux': '^4.4.5',
-            'redux': '^3.5.2',
-            'redux-immutable': '^3.0.6',
-            'reselect': '^2.4.0'
-          },
-          devDependencies: {
-            'babel-eslint': '^6.0.2',
-            'babel-polyfill': '^6.7.4',
-            'eslint': '^2.8.0',
-            'eslint-loader': '^1.3.0',
-            'eslint-plugin-react': '^4.3.0',
-            'remote-redux-devtools': '^0.1.6'
-          }
+      const packageJSONPath = this.destinationPath('package.json');
+      const packageJSON = {
+        name: this.applicationName,
+        engines: {
+          node: '>=4.3'
+        },
+        scripts: {
+          'build-ios': 'node node_modules/react-native/local-cli/cli.js bundle --entry-file index.ios.js --bundle-output iOS/main.jsbundle --platform "ios" --assets-dest ./  --dev false --reset-cache',
+          'build-android': 'node node_modules/react-native/local-cli/cli.js bundle --entry-file index.android.js --bundle-output iOS/main.jsbundle --platform "android" --assets-dest ./  --dev false --reset-cache',
+          'ios': 'node node_modules/react-native/local-cli/cli.js run-ios',
+          'android': 'node node_modules/react-native/local-cli/cli.js run-android'
+        },
+        dependencies: {
+          'react': '15.0.2',
+          'react-native': '^0.26.1',
+          'react-redux': '^4.4.5',
+          'redux': '^3.5.2',
+          'redux-immutable': '^3.0.6',
+          'reselect': '^2.4.0'
+        },
+        devDependencies: {
+          'babel-eslint': '^6.0.2',
+          'babel-polyfill': '^6.7.4',
+          'eslint': '^2.8.0',
+          'eslint-loader': '^1.3.0',
+          'eslint-plugin-react': '^4.3.0',
+          'remote-redux-devtools': '^0.1.6'
         }
-      );
+      };
+
+      try {
+        fs.statSync(packageJSONPath);
+
+        // merge current package.json in the dest directory with packageJSON
+        const originalPackageJSON = fsExtra.readJsonSync(packageJSONPath);
+
+        const json = Object.assign(
+          packageJSON, {
+            scripts: Object.assign({}, originalPackageJSON.scripts, packageJSON.scripts),
+            dependencies: Object.assign({}, originalPackageJSON.dependencies, packageJSON.dependencies),
+            devDependencies: Object.assign({}, originalPackageJSON.devDependencies, packageJSON.devDependencies)
+          }
+        );
+
+        this.conflicter.force = true;
+        this.fs.writeJSON(json);
+      } catch (e) {
+        // no package.json in the target directory
+        this.fs.writeJSON(packageJSONPath, packageJSON);
+      }
     },
 
     eslint() {

@@ -19,7 +19,7 @@ describe('generator-rn:component', () => {
 
   describe('simple component', () => {
     before(done => {
-      helpers.run(path.join(__dirname, '../generators/component'))
+      helpers.run(path.join(__dirname, '../src/generators/component'))
       .withPrompts({
         componentName,
         boilerplateName: boilerplate
@@ -50,7 +50,7 @@ describe('generator-rn:component', () => {
 
   describe('platform specific component', () => {
     before(done => {
-      helpers.run(path.join(__dirname, '../generators/component'))
+      helpers.run(path.join(__dirname, '../src/generators/component'))
       .withPrompts({
         componentName,
         boilerplateName: boilerplate,
