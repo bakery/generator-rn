@@ -3,30 +3,47 @@ import { NavigationExperimental } from 'react-native';
 const { CardStack: NavigationCardStack } = NavigationExperimental;
 
 class {{componentName}} extends Component {
+  constructor(props) {
+    super(props);
+
+    this._renderScene = this._renderScene.bind(this);
+    this._renderOverlay = this._renderOverlay.bind(this);
+  }
+
   render() {
     return (
       <NavigationCardStack
         direction={ 'vertical' }
+        style={styles.main}
         navigationState={ this.props.{{reducerName}} }
-        onNavigate={ this.props.onNavigate }
-        renderScene={ this._renderScene.bind(this) }
-        renderOverlay={ this._renderHeader.bind(this) }
-        style={ styles.main }
+        renderOverlay={this._renderOverlay}
+        renderScene={this._renderScene}
       />
     );
   }
 
   _renderScene(props) {
-    // check *props.scene.navigationState.key* to figure out
+    // check *props.scene.route.key* to figure out
     // which scene shoud be rendered, for example
     //
-    // if (props.scene.navigationState.key === 'applicationTabs') {
+    // if (props.scene.route.key === 'applicationTabs') {
     //  return (
     //    <View>
     //      <ApplicationTabs />
     //    </View>
     //  );
     // }
+    //
+    // To navigate around use pushRoute and popRoute actions:
+    // import { actions as navigationActions } from 'react-native-navigation-redux-helpers';
+    // const {
+    //  popRoute,
+    //  pushRoute
+    // } = navigationActions;
+    // 
+    // pushRoute({ key: 'route smth'}, this.props.{{reducerName}}.key);
+    // popRoute(this.props.{{reducerName}}.key);
+
 
     return (
       <View style={ styles.container }>
@@ -35,25 +52,10 @@ class {{componentName}} extends Component {
     );
   }
 
-  _renderTitleComponent(props) {
-    return null;
-  }
-
-  _renderHeader(props) {
+  _renderOverlay(props) {
     return null;
   }
 }
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  return Object.assign({}, dispatchProps, stateProps, {
-    onNavigate: (action) => {
-      dispatchProps.dispatch(
-        Object.assign(action, {
-          scope: action.scope || stateProps.navigation.key
-        })
-      );
-    }
-  });
-};
 
-{{> mapDispatchAndPropsAndConnect mergeProps=true }}
+{{> mapDispatchAndPropsAndConnect }}
