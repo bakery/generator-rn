@@ -1,3 +1,5 @@
+⚠️⚠️⚠️️ This generator has been DEPRECATED. A maintained version of it can be found in the Baker Project - https://github.com/bakery/baker
+
 # Yeoman React Native Generator
 
 ## Overview
